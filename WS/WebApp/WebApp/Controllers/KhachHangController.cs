@@ -11,7 +11,23 @@ namespace WebApp.Controllers
     public class KhachHangController : ApiController
     {
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
-        
+        [HttpGet]
+        [ActionName("DangNhap")]
+        public IHttpActionResult dangNhap(String ten, String matKhau)
+        {
+            try
+            {
+                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == ten && x.mat_khau == matKhau);
+                if(kh == null)
+                {
+                    return Ok(false);
+                }
+                return Ok(true);
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet]
         [ActionName("getMot")] // lay thong tin khach hang, truyen vao id_khach_hang
         public IHttpActionResult getMotKhachHang(int id)
