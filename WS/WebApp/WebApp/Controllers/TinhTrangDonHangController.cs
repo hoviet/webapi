@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,8 +11,8 @@ namespace WebApp.Controllers
     {
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
         [HttpGet]
-        [ActionName("getListTinhTrang")] //truyen vao id_tinh_trang
-        public IHttpActionResult getTinhTrangDonHangList([FromBody] TinhTrangDonHang tinhTrang)
+        [ActionName("getListTinhTrang")] 
+        public IHttpActionResult getTinhTrangDonHangList()
         {
             try
             {
@@ -34,11 +34,11 @@ namespace WebApp.Controllers
 
         [HttpGet]
         [ActionName("getTinhTrang")] //truyen vao id_tinh_trang
-        public IHttpActionResult getTinhTrangDonHang([FromBody] TinhTrangDonHang tinhTrang)
+        public IHttpActionResult getTinhTrangDonHang(int id)
         {
             try
             {
-                TinhTrangDonHang tr = db.TinhTrangDonHangs.FirstOrDefault(x => x.id_tinh_trang == tinhTrang.id_tinh_trang);
+                TinhTrangDonHang tr = db.TinhTrangDonHangs.FirstOrDefault(x => x.id_tinh_trang == id);
                 if(tr == null)
                 {
                     return NotFound();
@@ -96,11 +96,11 @@ namespace WebApp.Controllers
         }
         [HttpDelete]
         [ActionName("delete")] //truyen vao id_tinh_trang
-        public IHttpActionResult deleteTinhTrangDonHang([FromBody] TinhTrangDonHang tinhTrangDonHang)
+        public IHttpActionResult deleteTinhTrangDonHang(int id)
         {
             try
             {
-                TinhTrangDonHang tr = db.TinhTrangDonHangs.FirstOrDefault(x => x.id_tinh_trang == tinhTrangDonHang.id_tinh_trang);
+                TinhTrangDonHang tr = db.TinhTrangDonHangs.FirstOrDefault(x => x.id_tinh_trang == id);
 
                 if(tr == null)
                 {
