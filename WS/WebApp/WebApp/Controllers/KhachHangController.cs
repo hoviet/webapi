@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace WebApp.Controllers
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
         
         [HttpGet]
-        [ActionName("getMot")] // lay thong tin khac hang, truyen vao id_khach_hang
+        [ActionName("getMot")] // lay thong tin khach hang, truyen vao id_khach_hang
         public IHttpActionResult getMotKhachHang(int id)
         {
             try
@@ -38,22 +38,12 @@ namespace WebApp.Controllers
         {
             try
             {
-                QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
-
-               
-               // cần thay đôi gì thi thay doi
-               // k cần thì save luong
-
                 db.KhachHangs.InsertOnSubmit(khachhang);
                 db.SubmitChanges();
-                //ok la ham thanh cong
-                // khi muon tra ve cai gì thì truyền trong ok 
                 return Ok(khachhang);
             }
             catch(Exception ex)
             {
-                // phải tra loi để còn mò dc lỗi
-                // k là sml
                 return BadRequest(ex.Message);
             }
         }
@@ -64,7 +54,6 @@ namespace WebApp.Controllers
         {
             try
             {
-                QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
                 KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == khachhang.id_khach_hang);
 
 
@@ -112,7 +101,6 @@ namespace WebApp.Controllers
         {
             try
             {
-                QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
                 KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == id);
                 if (kh == null)
                 {
