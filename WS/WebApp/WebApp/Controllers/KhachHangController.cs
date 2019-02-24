@@ -14,11 +14,11 @@ namespace WebApp.Controllers
         
         [HttpGet]
         [ActionName("getMot")] // lay thong tin khac hang, truyen vao id_khach_hang
-        public IHttpActionResult getMotKhachHang([FromBody]KhachHang khachHang)
+        public IHttpActionResult getMotKhachHang(int id)
         {
             try
             {
-                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == khachHang.id_khach_hang);
+                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == id);
                 if(kh == null)
                 {
                     return NotFound();
