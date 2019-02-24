@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -37,11 +37,11 @@ namespace WebApp.Controllers
         }
         [HttpGet]
         [ActionName("getMotHoaDon")]
-        public IHttpActionResult getMotHoaDon([FromBody] DonDatHang hoaDon)
+        public IHttpActionResult getMotHoaDon(int id)
         {
             try
             {
-                DonDatHang hd = db.DonDatHangs.FirstOrDefault(x => x.id_don_hang == hoaDon.id_don_hang);
+                DonDatHang hd = db.DonDatHangs.FirstOrDefault(x => x.id_don_hang == id);
                 HoaDon hoaDonTam = new HoaDon();
                 if(hd == null)
                 {
@@ -55,9 +55,6 @@ namespace WebApp.Controllers
                 hoaDonTam.soDT = hd.so_dt_nguoi_nhan;
                 hoaDonTam.tongGia =(float) hd.tong_tien;
                 hoaDonTam.ghiChu = hd.ghi_chu;
-                //hd.KhachHang.SanPhamYeuThiches = null;
-               // hd.KhachHang.DonDatHangs = null;
-               // hd.ChiTietDonHangs = null;
                 return Ok(hoaDonTam);
             }catch(Exception ex)
             {
@@ -125,11 +122,11 @@ namespace WebApp.Controllers
         }
         [HttpDelete]
         [ActionName("delete")]
-        public IHttpActionResult deleteDonDatHang([FromBody] DonDatHang donDatHang)
+        public IHttpActionResult deleteDonDatHang(int id)
         {
             try
             {
-                DonDatHang ddh = db.DonDatHangs.FirstOrDefault(x => x.id_don_hang == donDatHang.id_don_hang);
+                DonDatHang ddh = db.DonDatHangs.FirstOrDefault(x => x.id_don_hang == id);
                 if(ddh == null)
                 {
                     return NotFound();
