@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -152,11 +152,11 @@ namespace WebApp.Controllers
         }
         [HttpDelete]
         [ActionName("delete")]
-        public IHttpActionResult deleteSanPham([FromBody] SanPham sanPham)
+        public IHttpActionResult deleteSanPham(int id)
         {
             try
             {
-                SanPham sp = db.SanPhams.FirstOrDefault(x => x.id_san_pham == sanPham.id_san_pham);
+                SanPham sp = db.SanPhams.FirstOrDefault(x => x.id_san_pham == id);
 
                 if(sp == null)
                 {
