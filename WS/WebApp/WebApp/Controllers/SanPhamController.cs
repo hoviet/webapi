@@ -15,11 +15,11 @@ namespace WebApp.Controllers
 
         [HttpGet]
         [ActionName("getMotSanPham")]
-        public IHttpActionResult getSanPham([FromBody] SanPham sanPham)
+        public IHttpActionResult getSanPham(int id)
         {
             try
             {
-                SanPham sp = db.SanPhams.FirstOrDefault(x => x.id_san_pham == sanPham.id_san_pham);               
+                SanPham sp = db.SanPhams.FirstOrDefault(x => x.id_san_pham == id);               
                 if (sp == null)
                 {
                     return NotFound();
@@ -36,11 +36,11 @@ namespace WebApp.Controllers
 
         [HttpGet]
         [ActionName("getTheoDanhMuc")]
-        public IHttpActionResult getListSanPham([FromBody] SanPham sanPham)
+        public IHttpActionResult getListSanPham(int id)
         {
             try
             {
-                List<SanPham> lsp = db.SanPhams.Where(x => x.id_danh_muc == sanPham.id_danh_muc).ToList();
+                List<SanPham> lsp = db.SanPhams.Where(x => x.id_danh_muc == id).ToList();
                 if (lsp == null)
                 {
                     return NotFound();
