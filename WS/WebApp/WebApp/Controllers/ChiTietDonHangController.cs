@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,11 +14,11 @@ namespace WebApp.Controllers
 
         [HttpGet]
         [ActionName("getListMotDon")]
-        public IHttpActionResult getChiTietDonHang([FromBody]ChiTietDonHang chiTietDonHang)
+        public IHttpActionResult getChiTietDonHang(int id)
         {
             try
             {
-                List<ChiTietDonHang> list = db.ChiTietDonHangs.Where(x => x.id_don_hang == chiTietDonHang.id_don_hang).ToList();
+                List<ChiTietDonHang> list = db.ChiTietDonHangs.Where(x => x.id_don_hang == id).ToList();
                 if(list == null)
                 {
                     return NotFound();
