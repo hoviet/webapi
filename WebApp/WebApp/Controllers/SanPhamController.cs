@@ -14,7 +14,7 @@ namespace WebApp.Controllers
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
 
         [HttpGet]
-        [ActionName("MotSanPham")]
+        [ActionName("MotSanPham")]// chỉ cần gửi "id_san_pham":"?"
         public IHttpActionResult getSanPham([FromBody] SanPham sanPham)
         {
             try
@@ -34,7 +34,7 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        [ActionName("TheoDanhMuc")]
+        [ActionName("TheoDanhMuc")] //chỉ cần gửi id_danh_muc
         public IHttpActionResult getListSanPham([FromBody] SanPham sanPham)
         {
             try
@@ -56,7 +56,7 @@ namespace WebApp.Controllers
             }
         }
         [HttpGet]
-        [ActionName("PhanTrang")]
+        [ActionName("PhanTrang")] 
         public IHttpActionResult getSanPham10([FromBody] PhanTrang phamTrang)// phanTrang{idDanhMuc, Trang, Size}
         {
             try
