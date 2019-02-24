@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -13,7 +13,7 @@ namespace WebApp.Controllers
 
         [HttpGet]
         [ActionName("getTenLoaiSanPham")]
-        public IHttpActionResult getSanPhamList([FromBody] DanhMucSanPham loaiSanPham)
+        public IHttpActionResult getSanPhamList()
         {
             try
             {
@@ -34,11 +34,11 @@ namespace WebApp.Controllers
         }
         [HttpGet]
         [ActionName("getMotLoaiSanPham")]
-        public IHttpActionResult getMotLoaiSanPham([FromBody] DanhMucSanPham loaisp)
+        public IHttpActionResult getMotLoaiSanPham(int idLoai)
         {
             try
             {
-                DanhMucSanPham dmsp = db.DanhMucSanPhams.FirstOrDefault(x => x.id_danh_muc == loaisp.id_danh_muc);
+                DanhMucSanPham dmsp = db.DanhMucSanPhams.FirstOrDefault(x => x.id_danh_muc == idLoai);
                 if(dmsp == null)
                 {
                     return NotFound();
@@ -95,18 +95,18 @@ namespace WebApp.Controllers
         }
         [HttpDelete]
         [ActionName("delete")]
-        public IHttpActionResult deleteDanhMucSanPham([FromBody] DanhMucSanPham danhMucSanPham)
+        public IHttpActionResult deleteDanhMucSanPham(int id)
         {
             try
             {
-                DanhMucSanPham dmsp = db.DanhMucSanPhams.FirstOrDefault(x => x.id_danh_muc == danhMucSanPham.id_danh_muc);
+                DanhMucSanPham dmsp = db.DanhMucSanPhams.FirstOrDefault(x => x.id_danh_muc == id);
 
                 if(dmsp == null)
                 {
                     return NotFound();
                 }
 
-                db.DanhMucSanPhams.DeleteOnSubmit(danhMucSanPham);
+                db.DanhMucSanPhams.DeleteOnSubmit(dmsp);
                 db.SubmitChanges();
                 return Ok();
             }catch(Exception ex)
