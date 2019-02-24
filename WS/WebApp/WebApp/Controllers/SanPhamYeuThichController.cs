@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,11 +14,11 @@ namespace WebApp.Controllers
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
         [HttpGet]
         [ActionName("getYeuThich")]
-        public IHttpActionResult laySanPhamYeuThich([FromBody] SanPhamYeuThich sp)
+        public IHttpActionResult laySanPhamYeuThich(int id)
         {
             try
             {
-                List<SanPhamYeuThich> list = db.SanPhamYeuThiches.Where(x => x.id_khach_hang == sp.id_khach_hang).ToList();
+                List<SanPhamYeuThich> list = db.SanPhamYeuThiches.Where(x => x.id_khach_hang == id).ToList();
                 if (list == null)
                 {
                     return NotFound();
@@ -63,7 +63,6 @@ namespace WebApp.Controllers
         {
             try
             {
-                QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
                 SanPhamYeuThich sp = db.SanPhamYeuThiches.FirstOrDefault(x => x.id_san_pham == sanPhamYeuThich.id_san_pham && x.id_khach_hang == sanPhamYeuThich.id_khach_hang);
                 if(sp!= null)
                 {
@@ -79,12 +78,11 @@ namespace WebApp.Controllers
         }
         [HttpDelete]
         [ActionName("delete")]
-        public IHttpActionResult deleteSanPhamYeuThich([FromBody]SanPhamYeuThich sanPhamYeuThich)
+        public IHttpActionResult deleteSanPhamYeuThich(int id)
         {
             try
             {
-                QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
-                SanPhamYeuThich sp = db.SanPhamYeuThiches.FirstOrDefault(x => x.id_yeu_thich == sanPhamYeuThich.id_yeu_thich);
+                SanPhamYeuThich sp = db.SanPhamYeuThiches.FirstOrDefault(x => x.id_yeu_thich == id);
                 db.SanPhamYeuThiches.DeleteOnSubmit(sp);
                 db.SubmitChanges();
                 return Ok();
