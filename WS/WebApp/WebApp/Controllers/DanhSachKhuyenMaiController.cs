@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,7 +12,7 @@ namespace WebApp.Controllers
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
         [HttpGet]
         [ActionName("getListKhuyenMai")]
-        public IHttpActionResult getKhuyenMaiList([FromBody] DanhSachKhuyenMai danhSachKhuyenMai)
+        public IHttpActionResult getKhuyenMaiList()
         {
             try
             {
@@ -31,11 +31,11 @@ namespace WebApp.Controllers
 
         [HttpGet]
         [ActionName("getMotKhuyenMai")]
-        public IHttpActionResult GetKhuyenMai([FromBody] DanhSachKhuyenMai km)
+        public IHttpActionResult GetKhuyenMai(int id)
         {
             try
             {
-                DanhSachKhuyenMai khuyenMai = db.DanhSachKhuyenMais.FirstOrDefault(x => x.id_khuyen_mai == km.id_khuyen_mai);
+                DanhSachKhuyenMai khuyenMai = db.DanhSachKhuyenMais.FirstOrDefault(x => x.id_khuyen_mai == id);
                 if(khuyenMai == null)
                 {
                     return NotFound();
@@ -97,16 +97,16 @@ namespace WebApp.Controllers
         }
 
         [HttpDelete]
-        public IHttpActionResult deleteKhuyenMai([FromBody] DanhSachKhuyenMai khuyenMai)
+        public IHttpActionResult deleteKhuyenMai(int id)
         {
             try
             {
-                DanhSachKhuyenMai km = db.DanhSachKhuyenMais.FirstOrDefault(x => x.id_khuyen_mai == khuyenMai.id_khuyen_mai);
+                DanhSachKhuyenMai km = db.DanhSachKhuyenMais.FirstOrDefault(x => x.id_khuyen_mai == id);
                 if(km == null)
                 {
                     return NotFound();
                 }
-                db.DanhSachKhuyenMais.DeleteOnSubmit(khuyenMai);
+                db.DanhSachKhuyenMais.DeleteOnSubmit(km);
                 db.SubmitChanges();
                 return Ok();
             }catch(Exception ex)
