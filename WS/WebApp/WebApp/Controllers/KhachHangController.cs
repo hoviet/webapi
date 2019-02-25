@@ -20,9 +20,9 @@ namespace WebApp.Controllers
                 KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == ten && x.mat_khau == matKhau);
                 if(kh == null)
                 {
-                    return Ok(false);
+                    return NotFound();
                 }
-                return Ok(true);
+                return Ok(kh);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -54,6 +54,11 @@ namespace WebApp.Controllers
         {
             try
             {
+                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == khachhang.tai_khoan);
+                if(kh != null)
+                {
+                    return BadRequest("Đã tồn tại");
+                }
                 db.KhachHangs.InsertOnSubmit(khachhang);
                 db.SubmitChanges();
                 return Ok(khachhang);
