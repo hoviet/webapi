@@ -16,11 +16,11 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<DiaChiKhachHang> list = db.DiaChiKhachHangs.Where(e => e.id_khach_hang == id).ToList().Select(e => { e.KhachHang = null;e.QuanHuyen = null; e.TinhThanh = null;e.XaPhuong = null; return e; }).ToList();
+                List<DiaChiKhachHang> list = db.DiaChiKhachHangs.Where(e => e.id_khach_hang == id).ToList().Select(e => { e.KhachHang = null;e.QuanHuyen = null; e.TinhThanh = null;e.XaPhuong = null;e.DonDatHangs = null; return e; }).ToList();
                 if(list.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
-                }
+                }               
                 return Ok(list);
             }catch(Exception ex)
             {
