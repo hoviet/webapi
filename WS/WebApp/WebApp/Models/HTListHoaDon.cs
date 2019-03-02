@@ -5,15 +5,15 @@ using System.Web;
 
 namespace WebApp.Models
 {
-    public class HoaDon
+    public class HTListHoaDon
     {
         public int id { get; set; }
-        public int idKhachHang { get; set; }
-        public int idTinhTrang { get; set; }       
+        public string KhachHang { get; set; }
+        public string TinhTrang { get; set; }
         public float tongGia { get; set; }
         public int soDT { get; set; }
         public String ghiChu { get; set; }
-        public int idDiaChi { get; set; }
+        public string DiaChi { get; set; }
         public DateTime ngayLap { get; set; }
     }
 }

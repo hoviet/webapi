@@ -12,7 +12,7 @@ namespace WebApp.Models
         public float tongTien { get; set; }
         public DateTime ngayLap { get; set; }
         public int soDT { get; set; }
-        public String noiNhan { get; set; }
+        public int idNoiNhan { get; set; }
         public String ghiChu { get; set; }
         public List<TaoSanPhamDonHang> danhSachSanPham { get; set; }
     }
