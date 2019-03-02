@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -24,7 +24,7 @@ namespace WebApp.Controllers
                 }
                 for(int i = 0; i < listTam.Count; i++)
                 {
-                    listTam[i].SanPhams = null;
+                    listTam[i].SanPhams = null;                   
                 }
                 return Ok(listTam);
             }catch(Exception ex)

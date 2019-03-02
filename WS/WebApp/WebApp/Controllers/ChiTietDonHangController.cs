@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -13,7 +13,7 @@ namespace WebApp.Controllers
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
 
         [HttpGet]
-        [ActionName("getListMotDon")]
+       // [ActionName("getListMotDon")]
         public IHttpActionResult getChiTietDonHang(int id)
         {
             try

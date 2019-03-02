@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -80,7 +80,7 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        
         [HttpPost]
         [ActionName("insert")]
         public IHttpActionResult insertNewSanPham([FromBody] SanPham sanPham)
@@ -89,6 +89,7 @@ namespace WebApp.Controllers
             {
                 db.SanPhams.InsertOnSubmit(sanPham);
                 db.SubmitChanges();
+                //sanPham.url_hinh_chinh=
                 return Ok(sanPham);
             }
             catch (Exception ex)

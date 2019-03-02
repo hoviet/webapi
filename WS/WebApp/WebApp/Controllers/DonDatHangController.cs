@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,66 +11,63 @@ namespace WebApp.Controllers
 {
     public class DonDatHangController : ApiController
     {
-        QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
-
+       private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
+        //lay danh sach don dat hang doi voi 1 khach hang
         [HttpGet]
         [ActionName("getList")]
        public IHttpActionResult getListHoaDon([FromBody] PhanTrang phanTrang)
         {
             try
             {
+                //
                 List<DonDatHang> list = db.DonDatHangs.Where(x => x.id_khach_hang == phanTrang.id).ToPagedList(phanTrang.trang, phanTrang.size).ToList();
+                List<HTListHoaDon> lhd = new List<HTListHoaDon>();
                 if(list == null)
                 {
                     return NotFound();
                 }
                 for(int i = 0; i <list.Count; i++)
                 {
-                    list[i].KhachHang.SanPhamYeuThiches = null;
-                    list[i].ChiTietDonHangs = null;
+                    HTListHoaDon hoaDonTam = new HTListHoaDon();
+                    // tao dia chi noi nhan hang
+                    DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e => e.id == list[i].id_dia_chi);
+                    TinhThanh tinh = db.TinhThanhs.FirstOrDefault(x => x.ma_tinh == dc.id_tinh);
+                    QuanHuyen quan = db.QuanHuyens.FirstOrDefault(x => x.ma_quan_huyen == dc.id_quan);
+                    XaPhuong xa = db.XaPhuongs.FirstOrDefault(x => x.ma_xa_phuong == dc.id_xa_phuong);
+                    string diaChi = "" + dc.dia_chi + ", " + xa.ten + ", " + quan.ten_quan_huyen + ", " + tinh.ten;
+
+                    hoaDonTam.id = list[i].id_don_hang;
+                    hoaDonTam.KhachHang = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang == list[i].id_khach_hang).ten_nguoi_dung;
+                    hoaDonTam.TinhTrang = db.TinhTrangDonHangs.FirstOrDefault(e => e.id_tinh_trang == list[i].id_tinh_trang).tinh_trang_don_hang;
+                    hoaDonTam.ngayLap = list[i].ngay_lap;
+                    hoaDonTam.DiaChi = diaChi;
+                    hoaDonTam.soDT = list[i].so_dt_nguoi_nhan;
+                    hoaDonTam.tongGia = (float)list[i].tong_tien;
+                    hoaDonTam.ghiChu = list[i].ghi_chu;
+                    lhd.Add(hoaDonTam);
                 }
-                return Ok(list);
+                return Ok(lhd);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
-        [ActionName("getMotHoaDon")]
-        public IHttpActionResult getMotHoaDon(int id)
-        {
-            try
-            {
-                DonDatHang hd = db.DonDatHangs.FirstOrDefault(x => x.id_don_hang == id);
-                HoaDon hoaDonTam = new HoaDon();
-                if(hd == null)
-                {
-                    return NotFound();
-                }
-                hoaDonTam.id = hd.id_don_hang;
-                hoaDonTam.idKhachHang = hd.id_khach_hang;
-                hoaDonTam.idTinhTrang = hd.id_tinh_trang;
-                hoaDonTam.ngayLap = hd.ngay_lap;
-                hoaDonTam.noiNhan = hd.noi_nhan;
-                hoaDonTam.soDT = hd.so_dt_nguoi_nhan;
-                hoaDonTam.tongGia =(float) hd.tong_tien;
-                hoaDonTam.ghiChu = hd.ghi_chu;
-                return Ok(hoaDonTam);
-            }catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-         //hien thi mot hoa don dat hang chi tiet
+       
+        //hien thi mot hoa don dat hang chi tiet
         [HttpGet]
         [ActionName("hoaDon")]
-        public IHttpActionResult getHoaDon(int idDonHang, int idKhachHang) //id
+        public IHttpActionResult getHoaDon(int id) //id
         {
             try
             {
-                HienThiDonHang ctDonHang = new HienThiDonHang();
-                DonDatHang donHang = db.DonDatHangs.FirstOrDefault(x => x.id_don_hang == idDonHang && x.id_khach_hang == idKhachHang);
-                if(donHang == null)
+                HienThiDonHang ctDonHang = new HienThiDonHang();              
+                string diaChi = "";
+                DonDatHang donHang = db.DonDatHangs.FirstOrDefault(x => x.id_don_hang == id);
+                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(x => x.id == donHang.id_dia_chi);
+                TinhThanh tinh = db.TinhThanhs.FirstOrDefault(x => x.ma_tinh == dc.id_tinh);
+                QuanHuyen quan = db.QuanHuyens.FirstOrDefault(x => x.ma_quan_huyen == dc.id_quan);
+                XaPhuong xa = db.XaPhuongs.FirstOrDefault(x => x.ma_xa_phuong == dc.id_xa_phuong);
+                if (donHang == null)
                 {
                     return NotFound();
                 }
@@ -79,9 +76,10 @@ namespace WebApp.Controllers
                 ctDonHang.ngayLap = donHang.ngay_lap;
                 ctDonHang.tenNguoiNhan = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == donHang.id_khach_hang).ten_nguoi_dung;
                 ctDonHang.soDT ="0"+ donHang.so_dt_nguoi_nhan;
-                ctDonHang.diaChi = donHang.noi_nhan;
+                diaChi = "" + dc.dia_chi + ", " + xa.ten + ", " + quan.ten_quan_huyen + ", " + tinh.ten;
+                ctDonHang.diaChi = diaChi;
                 // add danh sach san pham
-                List<ChiTietDonHang> list = db.ChiTietDonHangs.Where(x => x.id_don_hang == idDonHang).ToList();
+                List<ChiTietDonHang> list = db.ChiTietDonHangs.Where(x => x.id_don_hang == id).ToList();
                 List<DSSanPham> lDanhSanPham = new List<DSSanPham>();
                 for(int i = 0; i< list.Count; i++)
                 {
@@ -110,9 +108,8 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        //tao don dat hang moi va luu cao xsdl
         [HttpPost]
-        [ActionName("themHoaDon")]
+        [ActionName("TaoHoaDon")]
         public IHttpActionResult themHoaDon([FromBody] TaoDonHang donHang)
         {
             try
@@ -124,7 +121,7 @@ namespace WebApp.Controllers
                 ddh.ngay_lap = donHang.ngayLap;
                 ddh.tong_tien = donHang.tongTien;
                 ddh.so_dt_nguoi_nhan = donHang.soDT;
-                ddh.noi_nhan = donHang.noiNhan;
+                ddh.id_dia_chi = donHang.idNoiNhan;
                 ddh.ghi_chu = donHang.ghiChu;
                 db.DonDatHangs.InsertOnSubmit(ddh);
                 db.SubmitChanges();
@@ -183,10 +180,6 @@ namespace WebApp.Controllers
                 {
                     ddh.id_tinh_trang = donDatHang.id_tinh_trang;
                 }
-                if(donDatHang.ngay_lap.Equals("0001 - 01 - 01T00: 00:00"))
-                {
-                    ddh.ngay_lap = donDatHang.ngay_lap;
-                }
                 if(donDatHang.tong_tien != 0)
                 {
                     ddh.tong_tien = donDatHang.tong_tien;
@@ -195,9 +188,9 @@ namespace WebApp.Controllers
                 {
                     ddh.so_dt_nguoi_nhan = donDatHang.so_dt_nguoi_nhan;
                 }
-                if(donDatHang.noi_nhan != null)
+                if(donDatHang.id_dia_chi != 0)
                 {
-                    ddh.noi_nhan = donDatHang.noi_nhan;
+                    ddh.id_dia_chi = donDatHang.id_dia_chi;
                 }
                 if(donDatHang.ghi_chu != null)
                 {
@@ -211,6 +204,7 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        //Xoa don dat hang
         [HttpDelete]
         [ActionName("delete")]
         public IHttpActionResult deleteDonDatHang(int id)

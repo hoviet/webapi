@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -6,11 +6,12 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
+
 namespace WebApp.Controllers
 {
     public class KhachHangController : ApiController
     {
-        QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
+        private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
         [HttpGet]
         [ActionName("DangNhap")]
         public IHttpActionResult dangNhap(String ten, String matKhau)
@@ -20,8 +21,9 @@ namespace WebApp.Controllers
                 KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == ten && x.mat_khau == matKhau);
                 if(kh == null)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
+                kh.mat_khau = null;
                 return Ok(kh);
             }catch(Exception ex)
             {
@@ -54,7 +56,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == khachhang.tai_khoan);
+                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == khachhang.tai_khoan|| x.so_dt == khachhang.so_dt||x.email == khachhang.email);
                 if(kh != null)
                 {
                     return BadRequest("Đã tồn tại");
@@ -82,10 +84,10 @@ namespace WebApp.Controllers
                 {
                     return NotFound();
                 }
-                if(khachhang.tai_khoan != null)
+ /*               if(khachhang.tai_khoan != null)
                 {
                     kh.tai_khoan = khachhang.tai_khoan;
-                }
+                }*/
                 if (khachhang.mat_khau != null)
                 {
                     kh.mat_khau = khachhang.mat_khau;
