@@ -38,6 +38,10 @@ namespace WebApp.Controllers
                     tam.tenKhachHang = list[i].ten_khach_hang;
                     tam.idDiaChiKhachHang = list[i].id;
                     tam.tenDiaChi = diaChi;
+                    tam.tinh = tinh.ten;
+                    tam.quanHuyen = quan.ten_quan_huyen;
+                    tam.xaPhuong = xa.ten;
+                    tam.diaChi = list[i].dia_chi;
                     ldt.Add(tam);
                 }
                 return Ok(ldt);
@@ -53,20 +57,29 @@ namespace WebApp.Controllers
             try
             {
                 DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e => e.id == id);
-                DiaChiKhachHang tam = new DiaChiKhachHang();
+                CTDiaChi tam = new CTDiaChi();
                 if(dc == null)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
-                tam.id = dc.id;
-                tam.id_khach_hang = dc.id_khach_hang;
-                tam.id_quan = dc.id_quan;
-                tam.id_tinh = dc.id_tinh;
-                tam.id_xa_phuong = dc.id_xa_phuong;
-                tam.dia_chi = dc.dia_chi;
-                tam.ten_khach_hang = dc.ten_khach_hang;
-                tam.so_dt = dc.so_dt;
+                tam.idXaPhuong = dc.id_xa_phuong;
+                tam.tenXaPhuong = db.XaPhuongs.FirstOrDefault(e => e.ma_xa_phuong == dc.id_xa_phuong).ten;
+
+                List<QuanHuyen> listQuanHuyen = db.QuanHuyens.Where(e => e.ma_tinh == dc.id_tinh).ToList().Select(e => { e.TinhThanh = null; e.XaPhuongs = null; e.DiaChiKhachHangs = null; return e; }).ToList();
+                List<XaPhuong> listXaPhuong = db.XaPhuongs.Where(e => e.ma_quan_huyen == dc.id_quan).ToList().Select(e => { e.QuanHuyen = null; e.DiaChiKhachHangs = null; return e; }).ToList();
                 
+                tam.diaChi = dc.dia_chi;
+                tam.id = dc.id;
+                tam.idKhachHang = dc.id_khach_hang;
+                tam.tenKhachHang = dc.ten_khach_hang;
+                tam.soDT = dc.so_dt;
+                tam.idQuanHuyen = dc.id_quan;
+                tam.tenQuanHuyen = db.QuanHuyens.FirstOrDefault(e => e.ma_quan_huyen == dc.id_quan).ten_quan_huyen;
+                tam.idTinh = dc.id_tinh;
+                tam.tenTinh = db.TinhThanhs.FirstOrDefault(e => e.ma_tinh == dc.id_tinh).ten;
+                tam.dsQuanHuyen = listQuanHuyen;
+                tam.dsXaPhuong = listXaPhuong;
+
                 return Ok(tam);
             }catch(Exception ex)
             {

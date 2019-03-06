@@ -13,7 +13,7 @@ namespace WebApp.Controllers
     {
        private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
         //lay danh sach don dat hang doi voi 1 khach hang
-        [HttpGet]
+        [HttpPost]
         [ActionName("getList")]
        public IHttpActionResult getListHoaDon([FromBody] PhanTrang phanTrang)
         {
@@ -24,7 +24,7 @@ namespace WebApp.Controllers
                 List<HTListHoaDon> lhd = new List<HTListHoaDon>();
                 if(list == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 for(int i = 0; i <list.Count; i++)
                 {
@@ -69,7 +69,7 @@ namespace WebApp.Controllers
                 XaPhuong xa = db.XaPhuongs.FirstOrDefault(x => x.ma_xa_phuong == dc.id_xa_phuong);
                 if (donHang == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 ctDonHang.idDonDatHang = donHang.id_don_hang;
                 ctDonHang.trangThai = db.TinhTrangDonHangs.FirstOrDefault(x => x.id_tinh_trang == donHang.id_tinh_trang).tinh_trang_don_hang;
@@ -131,9 +131,9 @@ namespace WebApp.Controllers
                 for(int i = 0; i <donHang.danhSachSanPham.Count; i++)
                 {
                     ChiTietDonHang ctDonHang = new ChiTietDonHang();
-                    int id = donHang.danhSachSanPham[i].idSanPhan;
+                    int id = donHang.danhSachSanPham[i].idSanPham;
                     ctDonHang.id_don_hang = tam.id_don_hang;
-                    ctDonHang.id_san_pham = 1;
+                    ctDonHang.id_san_pham = donHang.danhSachSanPham[i].idSanPham;
                     ctDonHang.gia_km = donHang.danhSachSanPham[i].giaKM;
                     ctDonHang.so_luong = donHang.danhSachSanPham[i].soLuong;
                     ctDonHang.tong_tien = donHang.danhSachSanPham[i].tongGia;
@@ -149,73 +149,30 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
-        [ActionName("insert")]
-        public IHttpActionResult insertDonDatHang([FromBody] DonDatHang donDatHang)
-        {
-            try
-            {
-                db.DonDatHangs.InsertOnSubmit(donDatHang);
-                db.SubmitChanges();
-                return Ok(true);
-            }catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut]
-        [ActionName("update")]
-        public IHttpActionResult updateDonDatHang([FromBody] DonDatHang donDatHang)
-        {
-            try
-            {
-                DonDatHang ddh = db.DonDatHangs.FirstOrDefault(x => x.id_don_hang == donDatHang.id_don_hang);
-
-                if(ddh == null)
-                {
-                    return NotFound();
-                }
-                if(donDatHang.id_tinh_trang != 0)
-                {
-                    ddh.id_tinh_trang = donDatHang.id_tinh_trang;
-                }
-                if(donDatHang.tong_tien != 0)
-                {
-                    ddh.tong_tien = donDatHang.tong_tien;
-                }
-                if(donDatHang.so_dt_nguoi_nhan != 0)
-                {
-                    ddh.so_dt_nguoi_nhan = donDatHang.so_dt_nguoi_nhan;
-                }
-                if(donDatHang.id_dia_chi != 0)
-                {
-                    ddh.id_dia_chi = donDatHang.id_dia_chi;
-                }
-                if(donDatHang.ghi_chu != null)
-                {
-                    ddh.ghi_chu = donDatHang.ghi_chu;
-                }
-
-                db.SubmitChanges();
-                return Ok(ddh);
-            }catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        //Xoa don dat hang
-        [HttpDelete]
-        [ActionName("delete")]
+        //Xoa don dat hang xoa chi tiet don dat hang
+        [HttpGet]
+        [ActionName("huyHoaDon")]
         public IHttpActionResult deleteDonDatHang(int id)
         {
             try
             {
                 DonDatHang ddh = db.DonDatHangs.FirstOrDefault(x => x.id_don_hang == id);
-                if(ddh == null)
+                if (ddh == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
+                //xoa chi tiet don dat hang
+                List<ChiTietDonHang> ct = db.ChiTietDonHangs.Where(x => x.id_don_hang == id).ToList();
+                if (ct.Count == 0)
+                {
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
+                for (int i = 0; i < ct.Count; i++)
+                {
+                    db.ChiTietDonHangs.DeleteOnSubmit(ct[i]);
+                    db.SubmitChanges();
+                }  
+                //xoa don dat hang
                 db.DonDatHangs.DeleteOnSubmit(ddh);
                 db.SubmitChanges();
                 return Ok();

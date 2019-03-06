@@ -10,10 +10,10 @@ namespace WebApp.Controllers
 {
     public class ChiTietDonHangController : ApiController
     {
-        QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
+        private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
 
         [HttpGet]
-       // [ActionName("getListMotDon")]
+        [ActionName("getListMotDon")]
         public IHttpActionResult getChiTietDonHang(int id)
         {
             try
@@ -21,15 +21,30 @@ namespace WebApp.Controllers
                 List<ChiTietDonHang> list = db.ChiTietDonHangs.Where(x => x.id_don_hang == id).ToList();
                 if(list == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
-                for(int i = 0; i < list.Count; i++)
+                List<DSSanPham> lDanhSanPham = new List<DSSanPham>();
+                for (int i = 0; i < list.Count; i++)
                 {
-                    list[i].SanPham.SanPhamYeuThiches = null;
-                    list[i].SanPham.DanhMucSanPham = null;
-                    list[i].DonDatHang = null;
+                    DSSanPham dsp = new DSSanPham();
+                    dsp.soLuong = list[i].so_luong;
+                    dsp.tongGia = (float)list[i].tong_tien;
+                    dsp.giaKM = (float)list[i].gia_km;
+                    //gan san pham 
+                    SanPham tam = db.SanPhams.FirstOrDefault(x => x.id_san_pham == list[i].id_san_pham);
+                    SanPham sp = new SanPham();
+                    sp.id_san_pham = tam.id_san_pham;
+                    sp.id_danh_muc = tam.id_danh_muc;
+                    sp.mo_ta = tam.mo_ta;
+                    sp.phan_tram_km = tam.phan_tram_km;
+                    sp.ten_sp = tam.ten_sp;
+                    sp.url_hinh_chinh = tam.url_hinh_chinh;
+                    sp.gia_sp = tam.gia_sp;
+                    sp.gia_km = tam.gia_km;
+                    dsp.sanPhan = sp;
+                    lDanhSanPham.Add(dsp);
                 }
-                return Ok(list);
+                return Ok(lDanhSanPham);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -58,7 +73,7 @@ namespace WebApp.Controllers
                 ChiTietDonHang ct = db.ChiTietDonHangs.FirstOrDefault(x => x.id_don_hang == chiTietDonHang.id_don_hang && x.id_san_pham == chiTietDonHang.id_san_pham);
                 if(ct == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 if(chiTietDonHang.so_luong != 0)
                 {
@@ -84,20 +99,23 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete]
-        [ActionName("delete")]
-        public IHttpActionResult deleteChiTietSanPham([FromBody] ChiTietDonHang chiTietDonHang)
+        [HttpGet]
+        [ActionName("xoa")]
+        public IHttpActionResult deleteChiTietSanPham(int idDonHang)
         {
             try
             {
-                ChiTietDonHang ct = db.ChiTietDonHangs.FirstOrDefault(x => x.id_don_hang == chiTietDonHang.id_don_hang && x.id_san_pham == chiTietDonHang.id_san_pham);
-                if(ct == null)
+                List< ChiTietDonHang> ct = db.ChiTietDonHangs.Where(x => x.id_don_hang == idDonHang).ToList();
+                if(ct.Count == 0)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
-
-                db.ChiTietDonHangs.DeleteOnSubmit(ct);
-                db.SubmitChanges();
+                for(int i = 0; i< ct.Count; i++)
+                {
+                    db.ChiTietDonHangs.DeleteOnSubmit(ct[i]);
+                    db.SubmitChanges();
+                }
+                
                 return Ok();
             }catch(Exception ex)
             {

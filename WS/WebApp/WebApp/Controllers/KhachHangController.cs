@@ -21,7 +21,7 @@ namespace WebApp.Controllers
                 KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == ten && x.mat_khau == matKhau);
                 if(kh == null)
                 {
-                    return BadRequest();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 kh.mat_khau = null;
                 return Ok(kh);
@@ -39,8 +39,9 @@ namespace WebApp.Controllers
                 KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == id);
                 if(kh == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
+                kh.DiaChiKhachHangs = null;
                 kh.DonDatHangs = null;
                 kh.SanPhamYeuThiches = null;
                 return Ok(kh);
@@ -71,7 +72,7 @@ namespace WebApp.Controllers
             }
         }
         //sua
-        [HttpPut]
+        [HttpPost]
         [ActionName("update")]
         public IHttpActionResult updateKhachHang([FromBody] KhachHang khachhang)
         {
@@ -82,12 +83,8 @@ namespace WebApp.Controllers
 
                 if (kh== null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
- /*               if(khachhang.tai_khoan != null)
-                {
-                    kh.tai_khoan = khachhang.tai_khoan;
-                }*/
                 if (khachhang.mat_khau != null)
                 {
                     kh.mat_khau = khachhang.mat_khau;
@@ -127,7 +124,7 @@ namespace WebApp.Controllers
                 KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == id);
                 if (kh == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 db.KhachHangs.DeleteOnSubmit(kh);
                 db.SubmitChanges();

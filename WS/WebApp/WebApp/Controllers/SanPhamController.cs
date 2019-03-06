@@ -19,15 +19,22 @@ namespace WebApp.Controllers
         {
             try
             {
-                SanPham sp = db.SanPhams.FirstOrDefault(x => x.id_san_pham == id);               
+                SanPham sp = db.SanPhams.FirstOrDefault(x => x.id_san_pham == id);
+                SanPham tam = new SanPham();
                 if (sp == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
-                sp.SanPhamYeuThiches = null;
-                sp.DanhMucSanPham = null;
-                sp.ChiTietDonHangs = null;
-                return Ok(sp);
+                tam.id_san_pham = sp.id_san_pham;
+                tam.id_danh_muc = sp.id_danh_muc;
+                tam.ten_sp = sp.ten_sp;
+                tam.so_luong = sp.so_luong;
+                tam.url_hinh_chinh = sp.url_hinh_chinh;
+                tam.mo_ta = sp.mo_ta;
+                tam.phan_tram_km = sp.phan_tram_km;
+                tam.gia_sp = sp.gia_sp;
+                tam.gia_km = sp.gia_km;
+                return Ok(tam);
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -40,39 +47,39 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<SanPham> lsp = db.SanPhams.Where(x => x.id_danh_muc == id).ToList();
+                List<SanPham> lsp = db.SanPhams.Where(x => x.id_danh_muc == id).ToList().Select(e => {
+                    e.DanhMucSanPham = null;
+                    e.SanPhamYeuThiches = null;
+                    e.ChiTietDonHangs = null;
+                    return e;
+                }).ToList();
                 if (lsp == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
-                for (int i = 0; i < lsp.Count; i++)
-                {
-                    lsp[i].DanhMucSanPham = null;
-                    lsp[i].SanPhamYeuThiches = null;
-                    lsp[i].ChiTietDonHangs = null;
-                }
+                
                 return Ok(lsp);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpPost]
         [ActionName("getPhanTrang")]
-        public IHttpActionResult getSanPham10([FromBody] PhanTrang phamTrang)// phanTrang{idDanhMuc, Trang, Size}
+        public IHttpActionResult getSanPham10([FromBody] PhanTrang phamTrang)// phanTrang{id, Trang, Size}
         {
             try
             {
-                List<SanPham> lsp = db.SanPhams.Where(x => x.id_danh_muc == phamTrang.id).ToPagedList(phamTrang.trang, phamTrang.size).ToList();               
+                List<SanPham> lsp = db.SanPhams.Where(x => x.id_danh_muc == phamTrang.id).ToPagedList(phamTrang.trang, phamTrang.size).ToList().Select(e =>
+                {
+                    e.DanhMucSanPham = null;
+                    e.SanPhamYeuThiches = null;
+                    e.ChiTietDonHangs = null;
+                    return e;
+                }).ToList();               
                 if (lsp == null)
                 {
-                    return NotFound();
-                }
-                for (int i = 0; i < lsp.Count; i++)
-                {
-                    lsp[i].DanhMucSanPham = null;
-                    lsp[i].SanPhamYeuThiches = null;
-                    lsp[i].ChiTietDonHangs = null;
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 return Ok(lsp);
             }catch(Exception ex)
@@ -108,7 +115,7 @@ namespace WebApp.Controllers
                 
                 if (sp == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 if (sanPham.id_danh_muc != 0)
                 {
@@ -161,7 +168,7 @@ namespace WebApp.Controllers
 
                 if(sp == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 db.SanPhams.DeleteOnSubmit(sp);
                 db.SubmitChanges();

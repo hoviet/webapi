@@ -13,52 +13,61 @@ namespace WebApp.Controllers
     {
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
         [HttpGet]
-        [ActionName("getYeuThich")]
-        public IHttpActionResult laySanPhamYeuThich(int id)
+        [ActionName("layMot")]
+        public IHttpActionResult laySanPhamYeuThich(int id)//id khach hang
         {
             try
             {
                 List<SanPhamYeuThich> list = db.SanPhamYeuThiches.Where(x => x.id_khach_hang == id).ToList();
+                List<SanPhamYeuThich> tam = new List<SanPhamYeuThich>();
                 if (list == null)
                 {
                     return NotFound();
                 }
                 for (int i = 0; i < list.Count; i++)
                 {
-                    list[i].KhachHang = null;
-                    list[i].SanPham.DanhMucSanPham = null;
+                    SanPhamYeuThich sp = new SanPhamYeuThich();
+                    sp.id_khach_hang = list[i].id_khach_hang;
+                    sp.id_san_pham = list[i].id_san_pham;
+                    sp.id_yeu_thich = list[i].id_yeu_thich;
+                    tam.Add(sp);
                 }
-                return Ok(list);
+                return Ok(tam);
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
-        [ActionName("getYeuThichPhanTrang")]
+        //hien thi danh sach san pham yeu thic cau mot khac hang
+        [HttpPost]
+        [ActionName("DanhSach")]
         public IHttpActionResult getsanPhamPhanTrang([FromBody] PhanTrang phanTrang)
         {
             try
             {
                 List<SanPhamYeuThich> list = db.SanPhamYeuThiches.Where(x => x.id_khach_hang == phanTrang.id).ToPagedList(phanTrang.trang, phanTrang.size).ToList();
-                if(list == null)
+                List<SanPham> lsp = new List<SanPham>();
+                 if(list == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
 
                 for (int i = 0; i < list.Count; i++)
                 {
-                    list[i].KhachHang = null;
-                    list[i].SanPham.DanhMucSanPham = null;
+                    SanPham sp = db.SanPhams.FirstOrDefault(e => e.id_san_pham == list[i].id_san_pham);
+                    sp.SanPhamYeuThiches = null;
+                    sp.DanhMucSanPham = null;
+                    sp.ChiTietDonHangs = null;
+                    lsp.Add(sp);
                 }
-                return Ok(list);
+                return Ok(lsp);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
         [HttpPost]
-        [ActionName("insert")]
+        [ActionName("themMoi")]
         public IHttpActionResult insertNewSanPhamYeuThich([FromBody] SanPhamYeuThich sanPhamYeuThich)
         {
             try
@@ -66,23 +75,27 @@ namespace WebApp.Controllers
                 SanPhamYeuThich sp = db.SanPhamYeuThiches.FirstOrDefault(x => x.id_san_pham == sanPhamYeuThich.id_san_pham && x.id_khach_hang == sanPhamYeuThich.id_khach_hang);
                 if(sp!= null)
                 {
-                    return Ok(false);
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 db.SanPhamYeuThiches.InsertOnSubmit(sanPhamYeuThich);
                 db.SubmitChanges();
-                return Ok();
+                return Ok(sanPhamYeuThich);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
         [HttpDelete]
-        [ActionName("delete")]
+        [ActionName("Xoa")]
         public IHttpActionResult deleteSanPhamYeuThich(int id)
         {
             try
             {
                 SanPhamYeuThich sp = db.SanPhamYeuThiches.FirstOrDefault(x => x.id_yeu_thich == id);
+                if(sp == null)
+                {
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
                 db.SanPhamYeuThiches.DeleteOnSubmit(sp);
                 db.SubmitChanges();
                 return Ok();

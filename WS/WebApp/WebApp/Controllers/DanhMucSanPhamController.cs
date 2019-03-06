@@ -12,19 +12,19 @@ namespace WebApp.Controllers
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
 
         [HttpGet]
-        [ActionName("getTenLoaiSanPham")]
+        [ActionName("danhSach")]
         public IHttpActionResult getSanPhamList()
         {
             try
             {
-                List<DanhMucSanPham> listTam = db.DanhMucSanPhams.ToList();
+                List<DanhMucSanPham> listTam = db.DanhMucSanPhams.ToList().Select(e =>
+                {
+                    e.SanPhams = null;
+                    return e;
+                }).ToList();
                 if(listTam == null)
                 {
-                    return NotFound();
-                }
-                for(int i = 0; i < listTam.Count; i++)
-                {
-                    listTam[i].SanPhams = null;                   
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 return Ok(listTam);
             }catch(Exception ex)
@@ -33,7 +33,7 @@ namespace WebApp.Controllers
             }
         }
         [HttpGet]
-        [ActionName("getMotLoaiSanPham")]
+        [ActionName("layMot")]
         public IHttpActionResult getMotLoaiSanPham(int idLoai)
         {
             try
@@ -41,7 +41,7 @@ namespace WebApp.Controllers
                 DanhMucSanPham dmsp = db.DanhMucSanPhams.FirstOrDefault(x => x.id_danh_muc == idLoai);
                 if(dmsp == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 dmsp.SanPhams = null;
                 return Ok(dmsp);
@@ -51,11 +51,16 @@ namespace WebApp.Controllers
             }
         }
         [HttpPost]
-        [ActionName("insert")]
+        [ActionName("them")]
         public IHttpActionResult inserNewDanhMucSanPham([FromBody] DanhMucSanPham danhMucSanPham)
         {
             try
             {
+                DanhMucSanPham dsp = db.DanhMucSanPhams.FirstOrDefault(e => e.ten_danh_muc.Equals(danhMucSanPham.ten_danh_muc));
+                if(dsp != null)
+                {
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
                 db.DanhMucSanPhams.InsertOnSubmit(danhMucSanPham);
                 db.SubmitChanges();
                 return Ok();
@@ -66,7 +71,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPut]
-        [ActionName("update")]
+        [ActionName("sua")]
         public IHttpActionResult updaeDanhMucSanPham([FromBody] DanhMucSanPham danhMucSanPham)
         {
             try
@@ -94,7 +99,7 @@ namespace WebApp.Controllers
             }
         }
         [HttpDelete]
-        [ActionName("delete")]
+        [ActionName("xoa")]
         public IHttpActionResult deleteDanhMucSanPham(int id)
         {
             try
@@ -103,7 +108,7 @@ namespace WebApp.Controllers
 
                 if(dmsp == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
 
                 db.DanhMucSanPhams.DeleteOnSubmit(dmsp);

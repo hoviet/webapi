@@ -7,7 +7,7 @@ namespace WebApp.Models
 {
     public class TaoSanPhamDonHang
     {
-        public int idSanPhan { get; set; }
+        public int idSanPham { get; set; }
         public int soLuong { get; set; }
         public float giaKM { get; set; }
         public float tongGia { get; set; }
