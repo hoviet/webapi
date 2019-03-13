@@ -56,7 +56,9 @@ C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\PagedList.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\PagedList.Mvc.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Net.Http.Formatting.dll
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Cors.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Helpers.dll
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Http.Cors.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Http.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Http.WebHost.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Mvc.dll
@@ -68,10 +70,11 @@ C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.WebPages.Razor.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\WebGrease.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\PagedList.xml
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\PagedList.Mvc.xml
-C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Newtonsoft.Json.xml
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Net.Http.Formatting.xml
-C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Helpers.xml
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Http.xml
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Http.Cors.xml
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Newtonsoft.Json.xml
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Helpers.xml
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Http.WebHost.xml
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Mvc.xml
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Optimization.xml
@@ -83,8 +86,8 @@ C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Antlr3.Runtime.pdb
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Diagnostics.DiagnosticSource.xml
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.AspNet.TelemetryCorrelation.xml
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Debug\WebApp.csprojAssemblyReference.cache
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Debug\WebApp.csproj.CoreCompileInputs.cache
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Debug\WebApp.csproj.CopyComplete
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Debug\WebApp.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Debug\WebApp.pdb
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Debug\WebApp.csprojAssemblyReference.cache

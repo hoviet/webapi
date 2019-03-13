@@ -4,11 +4,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using PagedList;
 using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [RoutePrefix("")]
     public class DonDatHangController : ApiController
     {
        private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
@@ -98,7 +101,7 @@ namespace WebApp.Controllers
                     sp.url_hinh_chinh = tam.url_hinh_chinh;
                     sp.gia_sp = tam.gia_sp;
                     sp.gia_km = tam.gia_km;
-                    dsp.sanPhan = sp;
+                    dsp.sanPham = sp;
                     lDanhSanPham.Add(dsp);
                 }
                 ctDonHang.danhSachHang = lDanhSanPham;

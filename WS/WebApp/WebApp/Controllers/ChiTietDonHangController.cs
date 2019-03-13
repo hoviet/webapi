@@ -4,10 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [RoutePrefix("")]
     public class ChiTietDonHangController : ApiController
     {
         private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
@@ -19,7 +22,7 @@ namespace WebApp.Controllers
             try
             {
                 List<ChiTietDonHang> list = db.ChiTietDonHangs.Where(x => x.id_don_hang == id).ToList();
-                if(list == null)
+                if(list.Count==0)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
@@ -41,7 +44,7 @@ namespace WebApp.Controllers
                     sp.url_hinh_chinh = tam.url_hinh_chinh;
                     sp.gia_sp = tam.gia_sp;
                     sp.gia_km = tam.gia_km;
-                    dsp.sanPhan = sp;
+                    dsp.sanPham = sp;
                     lDanhSanPham.Add(dsp);
                 }
                 return Ok(lDanhSanPham);

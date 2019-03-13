@@ -4,9 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace WebApp.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [RoutePrefix("")]
     public class DanhMucSanPhamController : ApiController
     {
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
@@ -22,23 +25,24 @@ namespace WebApp.Controllers
                     e.SanPhams = null;
                     return e;
                 }).ToList();
-                if(listTam == null)
+                if (listTam.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 return Ok(listTam);
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpGet]
         [ActionName("layMot")]
-        public IHttpActionResult getMotLoaiSanPham(int idLoai)
+        public IHttpActionResult MotLoaiSanPham(int id)
         {
             try
             {
-                DanhMucSanPham dmsp = db.DanhMucSanPhams.FirstOrDefault(x => x.id_danh_muc == idLoai);
+                DanhMucSanPham dmsp = db.DanhMucSanPhams.FirstOrDefault(x => x.id_danh_muc == id);
                 if(dmsp == null)
                 {
                     return StatusCode(HttpStatusCode.NoContent);

@@ -4,9 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace WebApp.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [RoutePrefix("")]
     public class DanhSachKhuyenMaiController : ApiController
     {
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
@@ -17,9 +20,9 @@ namespace WebApp.Controllers
             try
             {
                 List<DanhSachKhuyenMai> list = db.DanhSachKhuyenMais.ToList();
-                if (list == null)
+                if (list.Count==0)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 return Ok(list);
             }catch(Exception ex)
@@ -38,7 +41,7 @@ namespace WebApp.Controllers
                 DanhSachKhuyenMai khuyenMai = db.DanhSachKhuyenMais.FirstOrDefault(x => x.id_khuyen_mai == id);
                 if(khuyenMai == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 return Ok(khuyenMai);
             }catch(Exception ex)
@@ -70,7 +73,7 @@ namespace WebApp.Controllers
                 DanhSachKhuyenMai km = db.DanhSachKhuyenMais.FirstOrDefault(x => x.id_khuyen_mai == khuyenMai.id_khuyen_mai);
                 if(km == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 if(khuyenMai.ten_km != null)
                 {
@@ -104,7 +107,7 @@ namespace WebApp.Controllers
                 DanhSachKhuyenMai km = db.DanhSachKhuyenMais.FirstOrDefault(x => x.id_khuyen_mai == id);
                 if(km == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 db.DanhSachKhuyenMais.DeleteOnSubmit(km);
                 db.SubmitChanges();

@@ -4,9 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace WebApp.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [RoutePrefix("")]
     public class TinhTrangDonHangController : ApiController
     {
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
@@ -16,15 +19,16 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<TinhTrangDonHang> list = db.TinhTrangDonHangs.ToList();
-                if(list == null)
+                List<TinhTrangDonHang> list = db.TinhTrangDonHangs.ToList().Select(e =>
                 {
-                    return NotFound();
-                }
-                for(int i = 0;i <list.Count; i++)
+                    e.DonDatHangs = null;
+                    return e;
+                }).ToList();
+                if(list.Count == 0)
                 {
-                    list[i].DonDatHangs = null;
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
+
                 return Ok(list);
             }catch (Exception ex)
             {
@@ -41,7 +45,7 @@ namespace WebApp.Controllers
                 TinhTrangDonHang tr = db.TinhTrangDonHangs.FirstOrDefault(x => x.id_tinh_trang == id);
                 if(tr == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 tr.DonDatHangs = null;
                 return Ok(tr);
@@ -76,7 +80,7 @@ namespace WebApp.Controllers
 
                 if(tr == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 if(tinhTrangDonHang.tinh_trang_don_hang != null)
                 {
@@ -104,7 +108,7 @@ namespace WebApp.Controllers
 
                 if(tr == null)
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 db.TinhTrangDonHangs.DeleteOnSubmit(tr);
                 db.SubmitChanges();

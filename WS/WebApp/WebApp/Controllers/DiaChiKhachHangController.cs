@@ -4,10 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [RoutePrefix("")]
     public class DiaChiKhachHangController : ApiController
     {
         private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
@@ -26,7 +29,7 @@ namespace WebApp.Controllers
                 for(int i = 0; i < list.Count; i++)
                 {
                     HTDiaChi tam = new HTDiaChi();
-                    string diChi = "";
+                   
                     TinhThanh tinh = db.TinhThanhs.FirstOrDefault(x => x.ma_tinh == list[i].id_tinh);
                     QuanHuyen quan = db.QuanHuyens.FirstOrDefault(x => x.ma_quan_huyen == list[i].id_quan);
                     XaPhuong xa = db.XaPhuongs.FirstOrDefault(x => x.ma_xa_phuong == list[i].id_xa_phuong);
@@ -92,14 +95,25 @@ namespace WebApp.Controllers
         {
             try
             {
-                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e => e.id_xa_phuong == diaChi.id_xa_phuong && e.dia_chi.Equals(diaChi.dia_chi));
+                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e =>e.so_dt==diaChi.so_dt && e.id_khach_hang == diaChi.id_khach_hang && e.id_xa_phuong == diaChi.id_xa_phuong && e.dia_chi.Equals(diaChi.dia_chi));
                 if(dc != null)
                 {
-                    return BadRequest("Đã tồn tại");
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 db.DiaChiKhachHangs.InsertOnSubmit(diaChi);
                 db.SubmitChanges();
-                return Ok(diaChi);
+
+                DiaChiKhachHang tam = new DiaChiKhachHang();
+                tam.id = diaChi.id;
+                tam.id_khach_hang = diaChi.id_khach_hang;
+                tam.id_quan = diaChi.id_quan;
+                tam.id_tinh = diaChi.id_tinh;
+                tam.id_xa_phuong = diaChi.id_xa_phuong;
+                tam.loai = diaChi.loai;
+                tam.dia_chi = diaChi.dia_chi;
+                tam.so_dt = diaChi.so_dt;
+                tam.ten_khach_hang = diaChi.ten_khach_hang;
+                return Ok(tam);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);

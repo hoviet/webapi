@@ -88,3 +88,6 @@ C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Release\WebApp.csproj.CoreCompi
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Release\WebApp.csproj.CopyComplete
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Release\WebApp.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Release\WebApp.pdb
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Cors.dll
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Http.Cors.dll
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.Web.Http.Cors.xml
