@@ -70,6 +70,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
@@ -182,6 +183,7 @@
     <Compile Include="Controllers\DanhSachKhuyenMaiController.cs" />
     <Compile Include="Controllers\DiaChiKhachHangController.cs" />
     <Compile Include="Controllers\DonDatHangController.cs" />
+    <Compile Include="Controllers\FCMController.cs" />
     <Compile Include="Controllers\HinhSanPhamController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HomePageController.cs" />
@@ -200,6 +202,7 @@
     <Compile Include="Models\CTDiaChi.cs" />
     <Compile Include="Models\DoiMatKhau.cs" />
     <Compile Include="Models\DSSanPham.cs" />
+    <Compile Include="Models\FCMDangNhap.cs" />
     <Compile Include="Models\HienThiDonHang.cs" />
     <Compile Include="Models\HoaDon.cs" />
     <Compile Include="Models\HomePage.cs" />
@@ -282,6 +285,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="hinh\KhachHang\" />
     <Folder Include="hinh\SanPham\" />
   </ItemGroup>
   <ItemGroup>

@@ -14,7 +14,8 @@ namespace WebApp.Controllers
     [RoutePrefix("")]
     public class SanPhamYeuThichController : ApiController
     {
-        QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
+        private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
+
         [HttpGet]
         [ActionName("layMot")]
         public IHttpActionResult laySanPhamYeuThich(int id)//id khach hang
@@ -54,6 +55,36 @@ namespace WebApp.Controllers
             }
         }  
         
+        [HttpPost]
+        [ActionName("kiemTra")]
+        public IHttpActionResult kiemTraYeuThich (int idSanPham, int IdKhachHang)
+        {
+            try
+            {
+                if(IdKhachHang == 0)
+                {
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
+
+                SanPhamYeuThich sp = db.SanPhamYeuThiches.FirstOrDefault(e => e.id_san_pham == idSanPham && e.id_khach_hang == IdKhachHang);
+
+                if (sp == null)
+                {
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
+
+                SanPhamYeuThich tam = new SanPhamYeuThich();
+                tam.id_yeu_thich = sp.id_yeu_thich;
+                tam.id_san_pham = sp.id_san_pham;
+                tam.id_khach_hang = tam.id_khach_hang;
+
+                return Ok(tam);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         //hien thi danh sach san pham yeu thic cua mot khac hang
         [HttpPost]
         [ActionName("DanhSach")]
@@ -93,6 +124,7 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
         [HttpPost]
         [ActionName("themMoi")]
         public IHttpActionResult insertNewSanPhamYeuThich([FromBody] SanPhamYeuThich sanPhamYeuThich)

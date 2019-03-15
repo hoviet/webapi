@@ -19,7 +19,11 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<TinhThanh> list = db.TinhThanhs.ToList().Select(e => { e.QuanHuyens = null; e.DiaChiKhachHangs = null; return e; }).ToList();
+                List<TinhThanh> list = db.TinhThanhs.ToList().Select(e => {
+                    e.QuanHuyens = null;
+                    e.DiaChiKhachHangs = null;
+                    return e;
+                }).ToList();
                 if(list.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NoContent);

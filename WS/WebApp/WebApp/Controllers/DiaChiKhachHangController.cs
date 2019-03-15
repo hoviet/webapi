@@ -156,7 +156,7 @@ namespace WebApp.Controllers
                 }
                 db.DiaChiKhachHangs.DeleteOnSubmit(dc);
                 db.SubmitChanges();
-                return Ok(dc);
+                return Ok();
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);

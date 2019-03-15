@@ -165,7 +165,62 @@ namespace WebApp.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }     
+        }
+        [HttpGet]
+        [ActionName("DanhSach")]
+        public IHttpActionResult layHet()
+        {
+            try
+            {
+                List<SanPham> list = db.SanPhams.ToList().Select(e =>
+                {
+                    e.ChiTietDonHangs = null;
+                    e.DanhMucSanPham = null;
+                    e.SanPhamYeuThiches = null;
+                    return e;
+                }).ToList();
+                if (list.Count == 0)
+                {
+                    return StatusCode(HttpStatusCode.NotFound);
+                }
+                int a = list.Count;
+                list.ToPagedList(1, 10).ToList();
+                var tam = new {
+                    cout = a,
+                    ltam = list
+                };
+                return Ok(a);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        [ActionName("DanhSach")]
+        public IHttpActionResult Phantrang(int page, int size)
+        {
+            try
+            {
+                List<SanPham> list = db.SanPhams.ToList().Select(e =>
+                {
+                    e.ChiTietDonHangs = null;
+                    e.DanhMucSanPham = null;
+                    e.SanPhamYeuThiches = null;
+                    return e;
+                }).ToList().ToPagedList(page,size).ToList();
+                if (list.Count == 0)
+                {
+                    return StatusCode(HttpStatusCode.NotFound);
+                }
+                
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost]
         [ActionName("insert")]
         public IHttpActionResult insertNewSanPham([FromBody] SanPham sanPham)
