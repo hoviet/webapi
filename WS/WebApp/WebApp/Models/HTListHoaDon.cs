@@ -14,6 +14,6 @@ namespace WebApp.Models
         public int soDT { get; set; }
         public String ghiChu { get; set; }
         public string DiaChi { get; set; }
-        public DateTime ngayLap { get; set; }
+        public string ngayLap { get; set; }
     }
 }

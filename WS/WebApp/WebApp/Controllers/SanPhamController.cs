@@ -175,7 +175,7 @@ namespace WebApp.Controllers
                 List<SanPham> list = db.SanPhams.ToList().Select(e =>
                 {
                     e.ChiTietDonHangs = null;
-                    e.DanhMucSanPham = null;
+                    e.DanhMucSanPham.SanPhams = null;
                     e.SanPhamYeuThiches = null;
                     return e;
                 }).ToList();
@@ -205,7 +205,7 @@ namespace WebApp.Controllers
                 List<SanPham> list = db.SanPhams.ToList().Select(e =>
                 {
                     e.ChiTietDonHangs = null;
-                    e.DanhMucSanPham = null;
+                    e.DanhMucSanPham.SanPhams = null;
                     e.SanPhamYeuThiches = null;
                     return e;
                 }).ToList().ToPagedList(page,size).ToList();
@@ -241,6 +241,7 @@ namespace WebApp.Controllers
                 string fileName = "sanpham_" + sanPham.id_san_pham + ".png";
                 image.Save(Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/hinh/SanPham"), fileName));
                 SanPham tam = db.SanPhams.FirstOrDefault(e => e.id_san_pham == sanPham.id_san_pham);
+
                 tam.url_hinh_chinh = "~/hinh/SanPham" + fileName;
 
                 db.SubmitChanges();

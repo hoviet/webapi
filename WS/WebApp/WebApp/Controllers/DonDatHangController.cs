@@ -42,7 +42,7 @@ namespace WebApp.Controllers
                     hoaDonTam.id = list[i].id_don_hang;
                     hoaDonTam.KhachHang = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang == list[i].id_khach_hang).ten_nguoi_dung;
                     hoaDonTam.TinhTrang = db.TinhTrangDonHangs.FirstOrDefault(e => e.id_tinh_trang == list[i].id_tinh_trang).tinh_trang_don_hang;
-                    hoaDonTam.ngayLap = list[i].ngay_lap;
+                    hoaDonTam.ngayLap = list[i].ngay_lap.ToShortDateString();
                     hoaDonTam.DiaChi = diaChi;
                     hoaDonTam.soDT = list[i].so_dt_nguoi_nhan;
                     hoaDonTam.tongGia = (float)list[i].tong_tien;
@@ -76,7 +76,7 @@ namespace WebApp.Controllers
                 }
                 ctDonHang.idDonDatHang = donHang.id_don_hang;
                 ctDonHang.trangThai = db.TinhTrangDonHangs.FirstOrDefault(x => x.id_tinh_trang == donHang.id_tinh_trang).tinh_trang_don_hang;
-                ctDonHang.ngayLap = donHang.ngay_lap;
+                ctDonHang.ngayLap = donHang.ngay_lap.ToShortDateString();
                 ctDonHang.tenNguoiNhan = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == donHang.id_khach_hang).ten_nguoi_dung;
                 ctDonHang.soDT ="0"+ donHang.so_dt_nguoi_nhan;
                 diaChi = "" + dc.dia_chi + ", " + xa.ten + ", " + quan.ten_quan_huyen + ", " + tinh.ten;
@@ -184,5 +184,71 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet]
+        [ActionName("danhsach")]
+        public IHttpActionResult danhDachHoaDon()
+        {
+            try
+            {
+                List<DonDatHang> list = db.DonDatHangs.ToList();
+                int a = list.Count;
+                list.ToPagedList(1, 10).ToList();
+
+                List<dynamic> lhd = new List<dynamic>();
+
+                for(int i = 0; i<list.Count; i++)
+                {
+                    var tam = new
+                    {
+                        idDonHang = list[i].id_don_hang,
+                        idKhachHang = list[i].id_khach_hang,
+                        tenKhachHang = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang == list[i].id_khach_hang).ten_nguoi_dung,
+                        ngayLap = list[i].ngay_lap.ToShortDateString(),
+                        tinhTrang = db.TinhTrangDonHangs.FirstOrDefault(e => e.id_tinh_trang == list[i].id_tinh_trang).tinh_trang_don_hang,
+                        tongTien = list[i].tong_tien
+                    };
+                    lhd.Add(tam);
+                }
+                var oj = new
+                {
+                    danhSach = lhd,
+                    count = a
+                };
+                return Ok(oj);
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        [ActionName("danhsach")]
+        public IHttpActionResult danhDachHoaDon(int page, int size)
+        {
+            try
+            {
+                List<DonDatHang> list = db.DonDatHangs.ToList().ToPagedList(page, size).ToList();
+                List<dynamic> lhd = new List<dynamic>();
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var tam = new
+                    {
+                        idDonHang = list[i].id_don_hang,
+                        idKhachHang = list[i].id_khach_hang,
+                        tenKhachHang = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang == list[i].id_khach_hang).ten_nguoi_dung,
+                        ngayLap = list[i].ngay_lap.ToShortDateString(),
+                        tinhTrang = db.TinhTrangDonHangs.FirstOrDefault(e => e.id_tinh_trang == list[i].id_tinh_trang).tinh_trang_don_hang,
+                        tongTien = list[i].tong_tien
+                    };
+                    lhd.Add(tam);
+                }
+                return Ok(lhd);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        //List<dynamic> b = new List<dynamic> { };
     }
 }

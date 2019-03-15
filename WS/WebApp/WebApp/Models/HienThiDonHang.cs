@@ -12,7 +12,7 @@ namespace WebApp.Models
         public String tenNguoiNhan { get; set; }
         public String soDT { get; set; }
         public String diaChi { get; set; }
-        public DateTime ngayLap { get; set; }
+        public string ngayLap { get; set; }
         public List<DSSanPham> danhSachHang { get; set; }
     }
 }

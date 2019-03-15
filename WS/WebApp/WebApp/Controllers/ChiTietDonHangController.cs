@@ -111,7 +111,7 @@ namespace WebApp.Controllers
                 List< ChiTietDonHang> ct = db.ChiTietDonHangs.Where(x => x.id_don_hang == idDonHang).ToList();
                 if(ct.Count == 0)
                 {
-                    return StatusCode(HttpStatusCode.NoContent);
+                    return StatusCode(HttpStatusCode.NotFound);
                 }
                 for(int i = 0; i< ct.Count; i++)
                 {

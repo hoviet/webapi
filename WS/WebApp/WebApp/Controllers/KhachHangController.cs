@@ -24,22 +24,24 @@ namespace WebApp.Controllers
             try
             {
                 KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == ten && x.mat_khau == matKhau);
-                if(kh == null)
+                if (kh == null)
                 {
                     return StatusCode(HttpStatusCode.NotFound);
                 }
                 kh.mat_khau = null;
-                KhachHang tam = new KhachHang();
-                tam.id_khach_hang = kh.id_khach_hang;
-                tam.tai_khoan = kh.tai_khoan;
-                tam.ten_nguoi_dung = kh.ten_nguoi_dung;
-                tam.ngay_sinh = kh.ngay_sinh;
-                tam.so_dt = kh.so_dt;
-                tam.gioi_tinh = kh.gioi_tinh;
-                tam.t_dang_ky = kh.t_dang_ky;
-                tam.email = kh.email;
-                tam.url_hinh = kh.url_hinh;
-
+                DateTime ngay = (DateTime)kh.ngay_sinh;
+                var tam = new
+                {
+                    id_khach_hang = kh.id_khach_hang,
+                    tai_khoan = kh.tai_khoan,
+                    ten_nguoi_dung = kh.ten_nguoi_dung,
+                    ngay_sinh = ngay.ToShortDateString(),
+                    so_dt = kh.so_dt,
+                    gioi_tinh = kh.gioi_tinh,
+                    t_dang_ky = kh.t_dang_ky.ToShortDateString(),
+                    email = kh.email,
+                    url_hinh = kh.url_hinh
+                };
                 return Ok(tam);
             }catch(Exception ex)
             {
@@ -59,18 +61,19 @@ namespace WebApp.Controllers
                 {
                     return StatusCode(HttpStatusCode.NotFound);
                 }
-
-                KhachHang tam = new KhachHang();
-                tam.id_khach_hang = kh.id_khach_hang;
-                tam.tai_khoan = kh.tai_khoan;
-                tam.ten_nguoi_dung = kh.ten_nguoi_dung;
-                tam.ngay_sinh = kh.ngay_sinh;
-                tam.so_dt = kh.so_dt;
-                tam.gioi_tinh = kh.gioi_tinh;
-                tam.t_dang_ky = kh.t_dang_ky;
-                tam.email = kh.email;
-                tam.url_hinh = kh.url_hinh;
-
+                DateTime ngay = (DateTime)kh.ngay_sinh;
+                var tam = new
+                {
+                    id_khach_hang = kh.id_khach_hang,
+                    tai_khoan = kh.tai_khoan,
+                    ten_nguoi_dung = kh.ten_nguoi_dung,
+                    ngay_sinh = ngay.ToShortDateString(),
+                    so_dt = kh.so_dt,
+                    gioi_tinh = kh.gioi_tinh,
+                    t_dang_ky = kh.t_dang_ky.ToShortDateString(),
+                    email = kh.email,
+                    url_hinh = kh.url_hinh
+                };
                 FCM fcm = db.FCMs.FirstOrDefault(e => e.token.Equals(fCMDangNhap.token) && e.device.Equals(fCMDangNhap.device));
                 if(fcm == null)
                 {
@@ -132,7 +135,7 @@ namespace WebApp.Controllers
                 }).ToList();
                 if(list.Count == 0)
                 {
-                    return StatusCode(HttpStatusCode.NoContent);
+                    return StatusCode(HttpStatusCode.NotFound);
                 }
                 return Ok(list);
             }catch(Exception ex)
@@ -151,10 +154,20 @@ namespace WebApp.Controllers
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
-                kh.DiaChiKhachHangs = null;
-                kh.DonDatHangs = null;
-                kh.SanPhamYeuThiches = null;
-                return Ok(kh);
+                DateTime ngay = (DateTime)kh.ngay_sinh;
+                var tam = new
+                {
+                    id_khach_hang = kh.id_khach_hang,
+                    tai_khoan = kh.tai_khoan,
+                    ten_nguoi_dung = kh.ten_nguoi_dung,
+                    ngay_sinh = ngay.ToShortDateString(),
+                    so_dt = kh.so_dt,
+                    gioi_tinh = kh.gioi_tinh,
+                    t_dang_ky = kh.t_dang_ky.ToShortDateString(),
+                    email = kh.email,
+                    url_hinh = kh.url_hinh
+                };
+                return Ok(tam);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -174,7 +187,21 @@ namespace WebApp.Controllers
                 }
                 db.KhachHangs.InsertOnSubmit(khachhang);
                 db.SubmitChanges();
-                return Ok(khachhang);
+
+                DateTime ngay = (DateTime)khachhang.ngay_sinh;
+                var tam = new
+                {
+                    id_khach_hang = khachhang.id_khach_hang,
+                    tai_khoan = khachhang.tai_khoan,
+                    ten_nguoi_dung = khachhang.ten_nguoi_dung,
+                    ngay_sinh = ngay.ToShortDateString(),
+                    so_dt = khachhang.so_dt,
+                    gioi_tinh = khachhang.gioi_tinh,
+                    t_dang_ky = khachhang.t_dang_ky.ToShortDateString(),
+                    email = khachhang.email,
+                    url_hinh = khachhang.url_hinh
+                };
+                return Ok(tam);
             }
             catch(Exception ex)
             {
@@ -220,27 +247,32 @@ namespace WebApp.Controllers
                 if(khachhang.ten_nguoi_dung != null)
                 {
                     kh.ten_nguoi_dung = khachhang.ten_nguoi_dung;
-                }
-                if(khachhang.so_dt != null)
-                {
-                    kh.so_dt = khachhang.so_dt;
-                }
-                if(khachhang.email != null)
-                {
-                    kh.email = khachhang.email;
-                }
+                }                             
                 if(khachhang.ngay_sinh != null)
                 {
                     kh.ngay_sinh = khachhang.ngay_sinh;
-                }                
-                db.SubmitChanges();
-                
-                kh.SanPhamYeuThiches = null;
-                kh.DonDatHangs = null;
-                kh.DiaChiKhachHangs = null;
-                kh.mat_khau = null;
+                } 
+                if(khachhang.gioi_tinh != null)
+                {
+                    kh.gioi_tinh = khachhang.gioi_tinh;
+                }
 
-                return Ok(kh);
+                db.SubmitChanges();
+                DateTime ngay = (DateTime)kh.ngay_sinh;
+                var tam = new
+                {
+                    id_khach_hang = kh.id_khach_hang,
+                    tai_khoan = kh.tai_khoan,
+                    ten_nguoi_dung = kh.ten_nguoi_dung,
+                    ngay_sinh = ngay.ToShortDateString(),
+                    so_dt = kh.so_dt,
+                    gioi_tinh = kh.gioi_tinh,
+                    t_dang_ky = kh.t_dang_ky.ToShortDateString(),
+                    email = kh.email,
+                    url_hinh = kh.url_hinh
+                };              
+
+                return Ok(tam);
             }
             catch(Exception ex)
             {
