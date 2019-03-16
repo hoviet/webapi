@@ -14,22 +14,29 @@ namespace WebApp.Controllers
     {
         QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
         [HttpGet]
-        [ActionName("getListTinhTrang")] 
+        [ActionName("danhsach")] 
         public IHttpActionResult getTinhTrangDonHangList()
         {
             try
             {
-                List<TinhTrangDonHang> list = db.TinhTrangDonHangs.ToList().Select(e =>
-                {
-                    e.DonDatHangs = null;
-                    return e;
-                }).ToList();
+                List<TinhTrangDonHang> list = db.TinhTrangDonHangs.ToList();
                 if(list.Count == 0)
                 {
-                    return StatusCode(HttpStatusCode.NoContent);
+                    return StatusCode(HttpStatusCode.NotFound);
+                }
+                List<dynamic> lds = new List<dynamic>();
+                for(int i = 0; i <list.Count; i++)
+                {
+                    var tam = new
+                    {
+                        id_tinh_trang = list[i].id_tinh_trang,
+                        tinh_trang_don_hang = list[i].tinh_trang_don_hang,
+                        ghi_chu = list[i].ghi_chu
+                    };
+                    lds.Add(tam);
                 }
 
-                return Ok(list);
+                return Ok(lds);
             }catch (Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -37,7 +44,7 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        [ActionName("getTinhTrang")] //truyen vao id_tinh_trang
+        [ActionName("LayMot")] //truyen vao id_tinh_trang
         public IHttpActionResult getTinhTrangDonHang(int id)
         {
             try
@@ -47,8 +54,13 @@ namespace WebApp.Controllers
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
-                tr.DonDatHangs = null;
-                return Ok(tr);
+                var tam = new
+                {
+                    id_tinh_trang = tr.id_tinh_trang,
+                    tinh_trang_don_hang = tr.tinh_trang_don_hang,
+                    ghi_chu = tr.ghi_chu
+                };
+                return Ok(tam);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -56,14 +68,32 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        [ActionName("insert")] //truyen vao cac thuoc tinh
+        [ActionName("them")] //truyen vao cac thuoc tinh
         public IHttpActionResult insertNewTinhTrangDonHang([FromBody] TinhTrangDonHang tinhTrangDonHang)
         {
             try
             {
+                TinhTrangDonHang tr = db.TinhTrangDonHangs.FirstOrDefault(e => e.tinh_trang_don_hang.Equals(tinhTrangDonHang.tinh_trang_don_hang));
+                if(tr == null)
+                {
+                    var tam = new
+                    {
+                        id_tinh_trang = tr.id_tinh_trang,
+                        tinh_trang_don_hang = tr.tinh_trang_don_hang,
+                        ghi_chu = tr.ghi_chu
+                    };
+                    return Ok(tam);
+                }
+
                 db.TinhTrangDonHangs.InsertOnSubmit(tinhTrangDonHang);
                 db.SubmitChanges();
-                return Ok();
+                var tinhTrang = new
+                {
+                    id_tinh_trang = tinhTrangDonHang.id_tinh_trang,
+                    tinh_trang_don_hang = tinhTrangDonHang.tinh_trang_don_hang,
+                    ghi_chu = tinhTrangDonHang.ghi_chu
+                };
+                return Ok(tinhTrang);
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -80,7 +110,7 @@ namespace WebApp.Controllers
 
                 if(tr == null)
                 {
-                    return StatusCode(HttpStatusCode.NoContent);
+                    return StatusCode(HttpStatusCode.NotFound);
                 }
                 if(tinhTrangDonHang.tinh_trang_don_hang != null)
                 {
@@ -92,7 +122,13 @@ namespace WebApp.Controllers
                 }
 
                 db.SubmitChanges();
-                return Ok(tr);
+                var tam = new
+                {
+                    id_tinh_trang = tr.id_tinh_trang,
+                    tinh_trang_don_hang = tr.tinh_trang_don_hang,
+                    ghi_chu = tr.ghi_chu
+                };
+                return Ok(tam);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -108,8 +144,9 @@ namespace WebApp.Controllers
 
                 if(tr == null)
                 {
-                    return StatusCode(HttpStatusCode.NoContent);
+                    return StatusCode(HttpStatusCode.NotFound);
                 }
+
                 db.TinhTrangDonHangs.DeleteOnSubmit(tr);
                 db.SubmitChanges();
                 return Ok();

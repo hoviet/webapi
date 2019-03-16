@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -126,19 +127,93 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<KhachHang> list = db.KhachHangs.ToList().Select(e =>
-                {
-                    e.DonDatHangs = null;
-                    e.DiaChiKhachHangs = null;
-                    e.SanPhamYeuThiches = null;
-                    return e;
-                }).ToList();
-                if(list.Count == 0)
+                List<KhachHang> list = db.KhachHangs.ToList();
+                if (list.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NotFound);
                 }
-                return Ok(list);
+                int a = list.Count;
+
+                list.ToPagedList(1, 10).ToList();
+              
+                List<dynamic> ds = new List<dynamic>();
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    DateTime ngay = new DateTime();
+                    if (list[i].ngay_sinh != null)
+                    {
+                        ngay = (DateTime)list[i].ngay_sinh;
+                    }                    
+                    var tam = new
+                    {
+
+                        id_khach_hang = list[i].id_khach_hang,
+                        tai_khoan = list[i].tai_khoan,
+                        ten_nguoi_dung = list[i].ten_nguoi_dung,
+                        ngay_sinh = ngay.ToShortDateString(),
+                        so_dt = list[i].so_dt,
+                        gioi_tinh = list[i].gioi_tinh,
+                        t_dang_ky = list[i].t_dang_ky.ToShortDateString(),
+                        email = list[i].email,
+                        url_hinh = list[i].url_hinh
+
+                    };
+                    ds.Add(tam);
+                }
+                var obj = new
+                {
+                    danhSach = ds,
+                    count = a
+                };
+                return Ok(obj);
             }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [ActionName("danhSach")]
+        public IHttpActionResult KhachHang(int page, int size)
+        {
+            try
+            {
+                List<KhachHang> list = db.KhachHangs.ToList().ToPagedList(page, size).ToList();
+                if (list.Count == 0)
+                {
+                    return StatusCode(HttpStatusCode.NotFound);
+                }
+               
+                List<dynamic> ds = new List<dynamic>();
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    DateTime ngay = new DateTime();
+                    if (list[i].ngay_sinh != null)
+                    {
+                        ngay = (DateTime)list[i].ngay_sinh;
+                    }
+                    var tam = new
+                    {
+
+                        id_khach_hang = list[i].id_khach_hang,
+                        tai_khoan = list[i].tai_khoan,
+                        ten_nguoi_dung = list[i].ten_nguoi_dung,
+                        ngay_sinh = ngay.ToShortDateString(),
+                        so_dt = list[i].so_dt,
+                        gioi_tinh = list[i].gioi_tinh,
+                        t_dang_ky = list[i].t_dang_ky.ToShortDateString(),
+                        email = list[i].email,
+                        url_hinh = list[i].url_hinh
+
+                    };
+                    ds.Add(tam);
+                }
+
+                return Ok(ds);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

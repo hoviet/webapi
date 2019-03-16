@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -49,6 +50,86 @@ namespace WebApp.Controllers
                 }
                 return Ok(ldt);
             }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        [ActionName("danhsach")]
+        public IHttpActionResult alldanhSach()
+        {
+            try
+            {
+                List <DiaChiKhachHang> ldc = db.DiaChiKhachHangs.ToList();
+                if(ldc.Count == 0)
+                {
+                    return StatusCode(HttpStatusCode.NotFound);
+                }
+                int a = ldc.Count; // chieu dai cua danh sach
+                ldc.ToPagedList(1, 10).ToList();
+                List<dynamic> list = new List<dynamic>();
+                for(int i = 0; i <ldc.Count; i++)
+                {
+                    TinhThanh tinh = db.TinhThanhs.FirstOrDefault(x => x.ma_tinh == ldc[i].id_tinh);
+                    QuanHuyen quan = db.QuanHuyens.FirstOrDefault(x => x.ma_quan_huyen == ldc[i].id_quan);
+                    XaPhuong xa = db.XaPhuongs.FirstOrDefault(x => x.ma_xa_phuong == ldc[i].id_xa_phuong);
+                    string diaChi = "" + ldc[i].dia_chi + ", " + xa.ten + ", " + quan.ten_quan_huyen + ", " + tinh.ten;
+                    var tam = new
+                    {
+                        idDiaChi = ldc[i].id,
+                        tenKhachHang = ldc[i].ten_khach_hang,
+                        idKhachHang = ldc[i].id_khach_hang,
+                        soDT = ldc[i].so_dt,
+                        diaChi = diaChi,
+
+                    };
+                    list.Add(tam);
+                }
+                var obj = new
+                {
+                    danhSach = list,
+                    count = a
+                };
+                return Ok(obj);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [ActionName("danhsach")]
+        public IHttpActionResult allDS(int page, int size)
+        {
+            try
+            {
+                List<DiaChiKhachHang> ldc = db.DiaChiKhachHangs.ToList().ToPagedList(page, size).ToList();
+                if (ldc.Count == 0)
+                {
+                    return StatusCode(HttpStatusCode.NotFound);
+                }
+                List<dynamic> list = new List<dynamic>();
+                for (int i = 0; i < ldc.Count; i++)
+                {
+                    TinhThanh tinh = db.TinhThanhs.FirstOrDefault(x => x.ma_tinh == ldc[i].id_tinh);
+                    QuanHuyen quan = db.QuanHuyens.FirstOrDefault(x => x.ma_quan_huyen == ldc[i].id_quan);
+                    XaPhuong xa = db.XaPhuongs.FirstOrDefault(x => x.ma_xa_phuong == ldc[i].id_xa_phuong);
+                    string diaChi = "" + ldc[i].dia_chi + ", " + xa.ten + ", " + quan.ten_quan_huyen + ", " + tinh.ten;
+                    var tam = new
+                    {
+                        idDiaChi = ldc[i].id,
+                        tenKhachHang = ldc[i].ten_khach_hang,
+                        idKhachHang = ldc[i].id_khach_hang,
+                        soDT = ldc[i].so_dt,
+                        diaChi = diaChi,
+
+                    };
+                    list.Add(tam);
+                }
+                return Ok(list);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -136,8 +217,21 @@ namespace WebApp.Controllers
                 dc.id_xa_phuong = diaChi.id_xa_phuong;
                 dc.dia_chi = diaChi.dia_chi;
                 dc.loai = diaChi.loai;
+
                 db.SubmitChanges();
-                return Ok(dc);
+                var tam = new
+                {
+                    id = dc.id,
+                    id_khach_hang = dc.id_khach_hang,
+                    ten_khach_hang = dc.ten_khach_hang,
+                    so_dt = dc.so_dt,
+                    id_quan = dc.id_quan,
+                    id_tinh = dc.id_tinh,
+                    id_xa_phuong = dc.id_xa_phuong,
+                    dia_chi = dc.dia_chi,
+                    loai = dc.loai
+                };
+                return Ok(tam);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);

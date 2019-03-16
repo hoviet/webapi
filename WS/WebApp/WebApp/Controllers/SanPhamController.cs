@@ -172,24 +172,38 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<SanPham> list = db.SanPhams.ToList().Select(e =>
-                {
-                    e.ChiTietDonHangs = null;
-                    e.DanhMucSanPham.SanPhams = null;
-                    e.SanPhamYeuThiches = null;
-                    return e;
-                }).ToList();
+                List<SanPham> list = db.SanPhams.ToList();
                 if (list.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NotFound);
                 }
                 int a = list.Count;
+
                 list.ToPagedList(1, 10).ToList();
-                var tam = new {
+
+                List<dynamic> lds = new List<dynamic>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var sp = new
+                    {
+                        id_san_pham = list[i].id_san_pham,
+                        id_danh_muc = list[i].id_danh_muc,
+                        ten_sp = list[i].ten_sp,
+                        so_luong = list[i].so_luong,
+                        url_hinh_chinh = list[i].url_hinh_chinh,
+                        mo_ta = list[i].mo_ta,
+                        phan_tram_km = list[i].phan_tram_km,
+                        gia_sp = list[i].gia_sp,
+                        gia_km = list[i].gia_km
+                    };
+                    lds.Add(sp);
+                }
+                var tam = new
+                {
                     cout = a,
-                    ltam = list
+                    ltam = lds
                 };
-                return Ok(a);
+                return Ok(tam);
             }
             catch (Exception ex)
             {
@@ -202,19 +216,29 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<SanPham> list = db.SanPhams.ToList().Select(e =>
-                {
-                    e.ChiTietDonHangs = null;
-                    e.DanhMucSanPham.SanPhams = null;
-                    e.SanPhamYeuThiches = null;
-                    return e;
-                }).ToList().ToPagedList(page,size).ToList();
+                List<SanPham> list = db.SanPhams.ToList().ToPagedList(page,size).ToList();
                 if (list.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NotFound);
                 }
-                
-                return Ok(list);
+                List<dynamic> lds = new List<dynamic>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var sp = new
+                    {
+                        id_san_pham = list[i].id_san_pham,
+                        id_danh_muc = list[i].id_danh_muc,
+                        ten_sp = list[i].ten_sp,
+                        so_luong = list[i].so_luong,
+                        url_hinh_chinh = list[i].url_hinh_chinh,
+                        mo_ta = list[i].mo_ta,
+                        phan_tram_km = list[i].phan_tram_km,
+                        gia_sp = list[i].gia_sp,
+                        gia_km = list[i].gia_km
+                    };
+                    lds.Add(sp);
+                }
+                return Ok(lds);
             }
             catch (Exception ex)
             {
