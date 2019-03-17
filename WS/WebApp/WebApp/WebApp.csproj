@@ -204,6 +204,7 @@
     <Compile Include="Models\DSSanPham.cs" />
     <Compile Include="Models\FCMDangNhap.cs" />
     <Compile Include="Models\HienThiDonHang.cs" />
+    <Compile Include="Models\hinhAnh.cs" />
     <Compile Include="Models\HoaDon.cs" />
     <Compile Include="Models\HomePage.cs" />
     <Compile Include="Models\HTDiaChi.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Models\SanPhamYeuThichHT.cs" />
     <Compile Include="Models\TaoDonHang.cs" />
     <Compile Include="Models\TaoSanPhamDonHang.cs" />
+    <Compile Include="Models\ThongBao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuanLyBanHang.designer.cs">
       <AutoGen>True</AutoGen>

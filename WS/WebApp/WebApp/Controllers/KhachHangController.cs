@@ -31,6 +31,20 @@ namespace WebApp.Controllers
                 }
                 kh.mat_khau = null;
                 DateTime ngay = (DateTime)kh.ngay_sinh;
+                List<DonDatHang> donHang = db.DonDatHangs.Where(e => e.id_khach_hang == kh.id_khach_hang && e.id_tinh_trang == 5).ToList().Select(e=> {
+                    e.DiaChiKhachHang = null;
+                    e.KhachHang = null;
+                    e.TinhTrangDonHang = null;
+                    return e;
+                }).ToList();
+                int soSanPham = 0;
+                float tongGia = 0;
+                for(int i = 0; i <donHang.Count; i++)
+                {
+                    tongGia = tongGia +(float) donHang[i].tong_tien;
+                    List<ChiTietDonHang> lt = db.ChiTietDonHangs.Where(e => e.id_don_hang == donHang[i].id_don_hang).ToList();
+                    soSanPham = soSanPham + lt.Count;
+                }
                 var tam = new
                 {
                     id_khach_hang = kh.id_khach_hang,
@@ -41,7 +55,10 @@ namespace WebApp.Controllers
                     gioi_tinh = kh.gioi_tinh,
                     t_dang_ky = kh.t_dang_ky.ToShortDateString(),
                     email = kh.email,
-                    url_hinh = kh.url_hinh
+                    url_hinh = kh.url_hinh,
+                    tong_don_hang = donHang.Count,
+                    tong_gia = tongGia,
+                    so_san_pham = soSanPham
                 };
                 return Ok(tam);
             }catch(Exception ex)
@@ -62,6 +79,15 @@ namespace WebApp.Controllers
                 {
                     return StatusCode(HttpStatusCode.NotFound);
                 }
+                List<DonDatHang> donHang = db.DonDatHangs.Where(e => e.id_khach_hang == kh.id_khach_hang && e.id_tinh_trang == 5).ToList();
+                int soSanPham = 0;
+                float tongGia = 0;
+                for (int i = 0; i < donHang.Count; i++)
+                {
+                    tongGia = tongGia + (float)donHang[i].tong_tien;
+                    List<ChiTietDonHang> lt = db.ChiTietDonHangs.Where(e => e.id_don_hang == donHang[i].id_don_hang).ToList();
+                    soSanPham = soSanPham + lt.Count;
+                }
                 DateTime ngay = (DateTime)kh.ngay_sinh;
                 var tam = new
                 {
@@ -73,7 +99,10 @@ namespace WebApp.Controllers
                     gioi_tinh = kh.gioi_tinh,
                     t_dang_ky = kh.t_dang_ky.ToShortDateString(),
                     email = kh.email,
-                    url_hinh = kh.url_hinh
+                    url_hinh = kh.url_hinh,
+                    tong_don_hang = donHang.Count,
+                    tong_gia = tongGia,
+                    so_san_pham = soSanPham
                 };
                 FCM fcm = db.FCMs.FirstOrDefault(e => e.token.Equals(fCMDangNhap.token) && e.device.Equals(fCMDangNhap.device));
                 if(fcm == null)

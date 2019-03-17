@@ -140,15 +140,19 @@ namespace WebApp.Controllers
             {
                 message = "test",
                 title = "test"
-          
-            };
 
-            var fields = new
-            {
-                to = to,
-                data = data,
-                notification = notification,
             };
+                var fields = new
+                {
+                    data = new
+                    {
+                        body = "Body of Your Notification in Data",
+                        title = "Title of Your Notification in Title",
+                        image = "https://vcdn.tikicdn.com/media/upload/landingpage/banners/3189279a60f7f26e9c750ee285d1ee76.png"
+
+                    },
+                    to = "cDGZiMq4eqg:APA91bFKR_P5H-9luwNs1ig77vA4UHichUswRm3MhgOSwnSLipc0sqEUmiEOIQKdD-YmolBuwzr_mlLYe2UnUk6asBRixXTyNMgZ4GW-QCgwm8RJT9YwaKPWt-eMr6oPTp1AdrURhgFS"
+                };
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://fcm.googleapis.com/fcm/send");
             request.Method = "POST";
@@ -174,5 +178,58 @@ namespace WebApp.Controllers
 
             return  Ok(result);
         }
+
+        //[HttpPost]
+        //[ActionName("thongbao")]
+        //public IHttpActionResult guiTHongBao(string to)
+        //{
+        //    string API_ACCESS_KEY = "AAAARlBUfkw:APA91bEct_WArzMsLAqiKIEMCg9Vd5S6Eq_jcTiDLI2CTrx_t9VQeecPSMakRKUyKNTO4NcqBYppIxXflvQqortZvfKT9eQTbG_zZjztAh17i7JFU2rfyfPlAbBvl2uDr5sqzJ4CYbOy";
+        //    var notification = new
+        //    {
+        //        body = "test",
+        //        title = "test",
+        //        vibrate = 1,
+        //        sound = "default",
+        //        click_action = "FCM_PLUGIN_ACTIVITY"
+        //    };
+
+        //    var data = new
+        //    {
+        //        message = "test",
+        //        title = "test"
+
+        //    };
+
+        //    var fields = new
+        //    {
+        //        to = to,
+        //        data = data,
+        //        notification = notification,
+        //    };
+
+        //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://fcm.googleapis.com/fcm/send");
+        //    request.Method = "POST";
+        //    request.Headers.Add("Authorization", "key=" + API_ACCESS_KEY);
+
+        //    request.ContentType = "application/json";
+
+        //    string postData = new JavaScriptSerializer().Serialize(fields);
+
+        //    byte[] bytes = Encoding.UTF8.GetBytes(postData);
+        //    request.ContentLength = bytes.Length;
+
+        //    Stream requestStream = request.GetRequestStream();
+        //    requestStream.Write(bytes, 0, bytes.Length);
+
+        //    WebResponse response = request.GetResponse();
+        //    Stream stream = response.GetResponseStream();
+        //    StreamReader reader = new StreamReader(stream);
+
+        //    var result = reader.ReadToEnd();
+        //    stream.Dispose();
+        //    reader.Dispose();
+
+        //    return Ok(result);
+        //}
     }
 }

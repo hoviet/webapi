@@ -21,31 +21,62 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<DiaChiKhachHang> list = db.DiaChiKhachHangs.Where(e => e.id_khach_hang == id).ToList().Select(e => { e.DonDatHangs = null; return e; }).ToList();
-                List<HTDiaChi> ldt = new List<HTDiaChi>();
+                List<DiaChiKhachHang> list = db.DiaChiKhachHangs.Where(e => e.id_khach_hang == id && e.trang_thai == true).ToList().Select(e => { e.DonDatHangs = null; return e; }).ToList();
+                List<dynamic> ldt = new List<dynamic>();
                 if (list.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 } 
                 for(int i = 0; i < list.Count; i++)
                 {
-                    HTDiaChi tam = new HTDiaChi();
-                   
+                    List<QuanHuyen> listQuanHuyen = db.QuanHuyens.Where(e => e.ma_tinh == list[i].id_tinh).ToList();
+                    List<dynamic> listQuan = new List<dynamic>();
+                    for(int j = 0; j<listQuanHuyen.Count; j++)
+                    {
+                        var a = new
+                        {
+                            ma_quan_huyen = listQuanHuyen[i].ma_quan_huyen,
+                            ten_quan_huyen = listQuanHuyen[i].ten_quan_huyen,
+                            loai = listQuanHuyen[i].loai,
+                            ma_tinh = listQuanHuyen[i].ma_tinh,
+                        };
+                        listQuan.Add(a);
+                    }
+                    List<XaPhuong> listXaPhuong = db.XaPhuongs.Where(e => e.ma_quan_huyen == list[i].id_quan).ToList();
+                    List<dynamic> lx = new List<dynamic>();
+                    for (int k = 0; k < listXaPhuong.Count; k++)
+                    {
+                        var b = new
+                        {
+                            ma_quan_huyen = listXaPhuong[k].ma_quan_huyen,
+                            ten = listXaPhuong[i].ten,
+                            loai = listXaPhuong[i].loai,
+                            ma_xa_phuong = listXaPhuong[i].ma_xa_phuong,
+                        };
+                        lx.Add(b);
+                    }
                     TinhThanh tinh = db.TinhThanhs.FirstOrDefault(x => x.ma_tinh == list[i].id_tinh);
                     QuanHuyen quan = db.QuanHuyens.FirstOrDefault(x => x.ma_quan_huyen == list[i].id_quan);
                     XaPhuong xa = db.XaPhuongs.FirstOrDefault(x => x.ma_xa_phuong == list[i].id_xa_phuong);
-                    string diaChi = "" + list[i].dia_chi + ", " + xa.ten + ", " + quan.ten_quan_huyen + ", " + tinh.ten;
-
-                    tam.loai = list[i].loai;
-                    tam.soDt = list[i].so_dt;
-                    tam.idKhachHang = list[i].id_khach_hang;
-                    tam.tenKhachHang = list[i].ten_khach_hang;
-                    tam.idDiaChiKhachHang = list[i].id;
-                    tam.tenDiaChi = diaChi;
-                    tam.tinh = tinh.ten;
-                    tam.quanHuyen = quan.ten_quan_huyen;
-                    tam.xaPhuong = xa.ten;
-                    tam.diaChi = list[i].dia_chi;
+                    string diaChi = list[i].dia_chi + ", " + xa.ten + ", " + quan.ten_quan_huyen + ", " + tinh.ten;
+                    var tam = new
+                    {
+                        idXaPhuong = list[i].id_xa_phuong,
+                        tenXaPhuong = xa.ten,
+                        diaChi = list[i].dia_chi,
+                        id = list[i].id,
+                        idKhachHang = list[i].id_khach_hang,
+                        tenKhachHang = list[i].ten_khach_hang,
+                        soDT = list[i].so_dt,
+                        idQuanHuyen = list[i].id_quan,
+                        tenQuanHuyen = quan.ten_quan_huyen,
+                        idTinh = list[i].id_tinh,
+                        tenTinh = tinh.ten,
+                        diaChiCuThe = list[i].dia_chi + ", " + xa.ten + ", " + quan.ten_quan_huyen + ", " + tinh.ten,
+                        dsQuanHuyen = listQuan,
+                        dsXaPhuong = lx
+                       
+                    };
                     ldt.Add(tam);
                 }
                 return Ok(ldt);
@@ -60,7 +91,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                List <DiaChiKhachHang> ldc = db.DiaChiKhachHangs.ToList();
+                List <DiaChiKhachHang> ldc = db.DiaChiKhachHangs.Where(e=>e.trang_thai == true).ToList();
                 if(ldc.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NotFound);
@@ -104,7 +135,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<DiaChiKhachHang> ldc = db.DiaChiKhachHangs.ToList().ToPagedList(page, size).ToList();
+                List<DiaChiKhachHang> ldc = db.DiaChiKhachHangs.Where(e => e.trang_thai == true).ToList().ToPagedList(page, size).ToList();
                 if (ldc.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NotFound);
@@ -140,7 +171,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e => e.id == id);
+                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e => e.id == id && e.trang_thai == true);
                 CTDiaChi tam = new CTDiaChi();
                 if(dc == null)
                 {
@@ -181,6 +212,7 @@ namespace WebApp.Controllers
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
+                diaChi.trang_thai = true;
                 db.DiaChiKhachHangs.InsertOnSubmit(diaChi);
                 db.SubmitChanges();
 
@@ -207,7 +239,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e => e.id == diaChi.id);
+                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e => e.id == diaChi.id );
                 if(dc == null)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
@@ -248,7 +280,7 @@ namespace WebApp.Controllers
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
-                db.DiaChiKhachHangs.DeleteOnSubmit(dc);
+                dc.trang_thai = false;
                 db.SubmitChanges();
                 return Ok();
             }catch(Exception ex)

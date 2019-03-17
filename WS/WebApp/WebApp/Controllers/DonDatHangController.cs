@@ -204,6 +204,8 @@ namespace WebApp.Controllers
                         idKhachHang = list[i].id_khach_hang,
                         tenKhachHang = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang == list[i].id_khach_hang).ten_nguoi_dung,
                         ngayLap = list[i].ngay_lap.ToShortDateString(),
+                        idTinhTrang = list[i].id_tinh_trang,
+                        soDT = list[i].so_dt_nguoi_nhan,
                         tinhTrang = db.TinhTrangDonHangs.FirstOrDefault(e => e.id_tinh_trang == list[i].id_tinh_trang).tinh_trang_don_hang,
                         tongTien = list[i].tong_tien
                     };
@@ -238,6 +240,8 @@ namespace WebApp.Controllers
                         tenKhachHang = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang == list[i].id_khach_hang).ten_nguoi_dung,
                         ngayLap = list[i].ngay_lap.ToShortDateString(),
                         tinhTrang = db.TinhTrangDonHangs.FirstOrDefault(e => e.id_tinh_trang == list[i].id_tinh_trang).tinh_trang_don_hang,
+                        idTinhTrang = list[i].id_tinh_trang,
+                        soDT = list[i].so_dt_nguoi_nhan,
                         tongTien = list[i].tong_tien
                     };
                     lhd.Add(tam);

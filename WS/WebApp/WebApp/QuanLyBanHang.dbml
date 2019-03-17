@@ -115,26 +115,8 @@
       <Column Name="ghi_chu" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="DonDatHang_ChiTietDonHang" Member="ChiTietDonHangs" ThisKey="id_don_hang" OtherKey="id_don_hang" Type="ChiTietDonHang" />
       <Association Name="TinhTrangDonHang_DonDatHang" Member="TinhTrangDonHang" ThisKey="id_tinh_trang" OtherKey="id_tinh_trang" Type="TinhTrangDonHang" IsForeignKey="true" />
-      <Association Name="DiaChiKhachHang_DonDatHang" Member="DiaChiKhachHang" ThisKey="id_dia_chi" OtherKey="id" Type="DiaChiKhachHang" IsForeignKey="true" />
       <Association Name="KhachHang_DonDatHang" Member="KhachHang" ThisKey="id_khach_hang" OtherKey="id_khach_hang" Type="KhachHang" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.DiaChiKhachHang" Member="DiaChiKhachHangs">
-    <Type Name="DiaChiKhachHang">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="id_khach_hang" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ten_khach_hang" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="so_dt" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
-      <Column Name="id_tinh" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="id_quan" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="id_xa_phuong" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="dia_chi" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="loai" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="DiaChiKhachHang_DonDatHang" Member="DonDatHangs" ThisKey="id" OtherKey="id_dia_chi" Type="DonDatHang" />
-      <Association Name="QuanHuyen_DiaChiKhachHang" Member="QuanHuyen" ThisKey="id_quan" OtherKey="ma_quan_huyen" Type="QuanHuyen" IsForeignKey="true" />
-      <Association Name="TinhThanh_DiaChiKhachHang" Member="TinhThanh" ThisKey="id_tinh" OtherKey="ma_tinh" Type="TinhThanh" IsForeignKey="true" />
-      <Association Name="XaPhuong_DiaChiKhachHang" Member="XaPhuong" ThisKey="id_xa_phuong" OtherKey="ma_xa_phuong" Type="XaPhuong" IsForeignKey="true" />
-      <Association Name="KhachHang_DiaChiKhachHang" Member="KhachHang" ThisKey="id_khach_hang" OtherKey="id_khach_hang" Type="KhachHang" IsForeignKey="true" />
+      <Association Name="DiaChiKhachHang_DonDatHang" Member="DiaChiKhachHang" ThisKey="id_dia_chi" OtherKey="id" Type="DiaChiKhachHang" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.KhachHang" Member="KhachHangs">
@@ -160,6 +142,25 @@
       <Column Name="khach_hang" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="device" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="token" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DiaChiKhachHang" Member="DiaChiKhachHangs">
+    <Type Name="DiaChiKhachHang">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="id_khach_hang" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ten_khach_hang" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="so_dt" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="id_tinh" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="id_quan" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="id_xa_phuong" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="dia_chi" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="loai" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="trang_thai" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="DiaChiKhachHang_DonDatHang" Member="DonDatHangs" ThisKey="id" OtherKey="id_dia_chi" Type="DonDatHang" />
+      <Association Name="KhachHang_DiaChiKhachHang" Member="KhachHang" ThisKey="id_khach_hang" OtherKey="id_khach_hang" Type="KhachHang" IsForeignKey="true" />
+      <Association Name="QuanHuyen_DiaChiKhachHang" Member="QuanHuyen" ThisKey="id_quan" OtherKey="ma_quan_huyen" Type="QuanHuyen" IsForeignKey="true" />
+      <Association Name="TinhThanh_DiaChiKhachHang" Member="TinhThanh" ThisKey="id_tinh" OtherKey="ma_tinh" Type="TinhThanh" IsForeignKey="true" />
+      <Association Name="XaPhuong_DiaChiKhachHang" Member="XaPhuong" ThisKey="id_xa_phuong" OtherKey="ma_xa_phuong" Type="XaPhuong" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
