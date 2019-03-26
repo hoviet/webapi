@@ -91,3 +91,16 @@ C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Debug\WebApp.csproj.CopyComplet
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Debug\WebApp.dll
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Debug\WebApp.pdb
 C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\obj\Debug\WebApp.csprojAssemblyReference.cache
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\JWT.dll
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\JWT.xml
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.IdentityModel.Logging.pdb
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.IdentityModel.Tokens.pdb
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\Quang Viet\Desktop\WS\WebApp\WebApp\bin\System.IdentityModel.Tokens.Jwt.xml

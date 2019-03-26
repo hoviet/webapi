@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.Script.Serialization;
 using PagedList;
 using WebApp.Models;
 
@@ -12,6 +15,7 @@ namespace WebApp.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("")]
+    
     public class DonDatHangController : ApiController
     {
        private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
@@ -254,5 +258,29 @@ namespace WebApp.Controllers
             }
         }
         //List<dynamic> b = new List<dynamic> { };
+        [HttpPost]
+        [ActionName("chuyentrangthai")]
+        public IHttpActionResult chuyendoi(int idDonHang, int idTinhTrang)
+        {
+            try
+            {
+                DonDatHang donDH = db.DonDatHangs.FirstOrDefault(e => e.id_don_hang == idDonHang);
+                if(donDH == null)
+                {
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
+                donDH.id_tinh_trang = idTinhTrang;
+                db.SubmitChanges();
+
+                ThongBaoChuyenTT tb = new ThongBaoChuyenTT();
+                tb.giuThongBao(donDH.id_khach_hang, donDH.id_tinh_trang);
+
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

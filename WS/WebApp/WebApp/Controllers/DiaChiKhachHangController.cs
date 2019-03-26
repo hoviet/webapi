@@ -235,32 +235,54 @@ namespace WebApp.Controllers
         
         [HttpPost]
         [ActionName("update")]
-        public IHttpActionResult update([FromBody] DiaChiKhachHang diaChi)
+        public IHttpActionResult update([FromBody] DiaChi diaChi)
         {
             try
             {
-                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e => e.id == diaChi.id );
-                if(dc == null)
+                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e => e.id == diaChi.id);
+                if (dc == null)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
-                dc.id_quan = diaChi.id_quan;
-                dc.id_tinh = diaChi.id_tinh;
-                dc.id_xa_phuong = diaChi.id_xa_phuong;
-                dc.dia_chi = diaChi.dia_chi;
-                dc.loai = diaChi.loai;
-
+                if (diaChi.idQuanHuyen != null)
+                {
+                    dc.id_quan = diaChi.idQuanHuyen;
+                }
+                if (diaChi.idTinh != null)
+                {
+                    dc.id_tinh = diaChi.idTinh;
+                }
+                if (diaChi.idXaPhuong != null)
+                {
+                    dc.id_xa_phuong = diaChi.idXaPhuong;
+                }
+                if (diaChi.loai != null)
+                {
+                    dc.loai = diaChi.loai;
+                }
+                if (diaChi.diaChi != null) { 
+                    dc.dia_chi = diaChi.diaChi;
+                }
+                if(diaChi.tenKhachHang != null)
+                {
+                    dc.ten_khach_hang = diaChi.tenKhachHang;
+                }
+                if(diaChi.soDT != null)
+                {
+                    dc.so_dt = diaChi.soDT;
+                }
+                
                 db.SubmitChanges();
                 var tam = new
                 {
                     id = dc.id,
-                    id_khach_hang = dc.id_khach_hang,
-                    ten_khach_hang = dc.ten_khach_hang,
-                    so_dt = dc.so_dt,
-                    id_quan = dc.id_quan,
-                    id_tinh = dc.id_tinh,
-                    id_xa_phuong = dc.id_xa_phuong,
-                    dia_chi = dc.dia_chi,
+                    idKhachHang = dc.id_khach_hang,
+                    tenKhachHang = dc.ten_khach_hang,
+                    soDT = dc.so_dt,
+                    idQuan = dc.id_quan,
+                    idTinh = dc.id_tinh,
+                    idXaPhuong = dc.id_xa_phuong,
+                    diaChihi = dc.dia_chi,
                     loai = dc.loai
                 };
                 return Ok(tam);

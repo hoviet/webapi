@@ -45,10 +45,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JWT, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JWT.5.0.1\lib\net46\JWT.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.4.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.4.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.4.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
     </Reference>
@@ -59,6 +71,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.1.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.1.4\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -178,6 +193,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChiTietDonHangController.cs" />
     <Compile Include="Controllers\DanhMucSanPhamController.cs" />
     <Compile Include="Controllers\DanhSachKhuyenMaiController.cs" />
@@ -187,8 +203,10 @@
     <Compile Include="Controllers\HinhSanPhamController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HomePageController.cs" />
+    <Compile Include="Controllers\JWTController.cs" />
     <Compile Include="Controllers\KhachHangController.cs" />
     <Compile Include="Controllers\QuanController.cs" />
+    <Compile Include="Models\ResponseData.cs" />
     <Compile Include="Controllers\SanPhamController.cs" />
     <Compile Include="Controllers\SanPhamYeuThichController.cs" />
     <Compile Include="Controllers\TimKiemController.cs" />
@@ -200,20 +218,26 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CTDiaChi.cs" />
+    <Compile Include="Models\DiaChi.cs" />
     <Compile Include="Models\DoiMatKhau.cs" />
     <Compile Include="Models\DSSanPham.cs" />
     <Compile Include="Models\FCMDangNhap.cs" />
+    <Compile Include="Models\FCMInfo.cs" />
+    <Compile Include="Models\FCMQuangCao.cs" />
+    <Compile Include="Models\guiEmail.cs" />
     <Compile Include="Models\HienThiDonHang.cs" />
     <Compile Include="Models\hinhAnh.cs" />
     <Compile Include="Models\HoaDon.cs" />
     <Compile Include="Models\HomePage.cs" />
     <Compile Include="Models\HTDiaChi.cs" />
     <Compile Include="Models\HTListHoaDon.cs" />
+    <Compile Include="Models\JWTA.cs" />
+    <Compile Include="Models\JWTDN.cs" />
     <Compile Include="Models\PhanTrang.cs" />
     <Compile Include="Models\SanPhamYeuThichHT.cs" />
     <Compile Include="Models\TaoDonHang.cs" />
     <Compile Include="Models\TaoSanPhamDonHang.cs" />
-    <Compile Include="Models\ThongBao.cs" />
+    <Compile Include="Models\ThongBaoChuyenTT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuanLyBanHang.designer.cs">
       <AutoGen>True</AutoGen>
@@ -288,6 +312,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="hinh\KhachHang\" />
+    <Folder Include="hinh\KhuyenMai\" />
     <Folder Include="hinh\SanPham\" />
   </ItemGroup>
   <ItemGroup>

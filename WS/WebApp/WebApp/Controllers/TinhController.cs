@@ -10,6 +10,7 @@ namespace WebApp.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("")]
+   // [Authorize]
     public class TinhController : ApiController
     {
         private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
@@ -19,16 +20,23 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<TinhThanh> list = db.TinhThanhs.ToList().Select(e => {
-                    e.QuanHuyens = null;
-                    e.DiaChiKhachHangs = null;
-                    return e;
-                }).ToList();
+                List<TinhThanh> list = db.TinhThanhs.ToList();
                 if(list.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
-                return Ok(list);
+                List<dynamic> ds = new List<dynamic>();
+                for(int i = 0; i< list.Count; i++)
+                {
+                    var tam = new
+                    {
+                        ma_tinh = list[i].ma_tinh,
+                        ten = list[i].ten,
+                        loai = list[i].loai
+                    };
+                    ds.Add(tam);
+                }
+                return Ok(ds);
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);

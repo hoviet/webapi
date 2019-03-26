@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using WebApp.Models;
@@ -14,6 +15,7 @@ namespace WebApp.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("")]
+  //  [Authorize]
     public class KhachHangController : ApiController
     {
         private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
@@ -24,19 +26,19 @@ namespace WebApp.Controllers
         {
             try
             {
-                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == ten && x.mat_khau == matKhau);
+                KhachHang kh = db.KhachHangs.FirstOrDefault(e => e.so_dt == ten && e.mat_khau == matKhau && e.trang_thai == true);
+                
                 if (kh == null)
                 {
-                    return StatusCode(HttpStatusCode.NotFound);
+                    kh = db.KhachHangs.FirstOrDefault(e => e.email == ten && e.mat_khau == matKhau && e.trang_thai == true);
+                    if (kh == null)
+                    {
+                        return StatusCode(HttpStatusCode.NotFound);
+                    }
                 }
                 kh.mat_khau = null;
                 DateTime ngay = (DateTime)kh.ngay_sinh;
-                List<DonDatHang> donHang = db.DonDatHangs.Where(e => e.id_khach_hang == kh.id_khach_hang && e.id_tinh_trang == 5).ToList().Select(e=> {
-                    e.DiaChiKhachHang = null;
-                    e.KhachHang = null;
-                    e.TinhTrangDonHang = null;
-                    return e;
-                }).ToList();
+                List<DonDatHang> donHang = db.DonDatHangs.Where(e => e.id_khach_hang == kh.id_khach_hang && e.id_tinh_trang == 5).ToList();
                 int soSanPham = 0;
                 float tongGia = 0;
                 for(int i = 0; i <donHang.Count; i++)
@@ -56,10 +58,12 @@ namespace WebApp.Controllers
                     t_dang_ky = kh.t_dang_ky.ToShortDateString(),
                     email = kh.email,
                     url_hinh = kh.url_hinh,
+                    xac_thuc = kh.xac_thuc,
                     tong_don_hang = donHang.Count,
                     tong_gia = tongGia,
                     so_san_pham = soSanPham
                 };
+
                 return Ok(tam);
             }catch(Exception ex)
             {
@@ -74,10 +78,14 @@ namespace WebApp.Controllers
         {
             try
             {
-                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == fCMDangNhap.taiKhoan && x.mat_khau == fCMDangNhap.matKhau);
+                KhachHang kh = db.KhachHangs.FirstOrDefault(e => e.so_dt == fCMDangNhap.taiKhoan && e.mat_khau == fCMDangNhap.matKhau && e.trang_thai == true);
                 if (kh == null)
                 {
-                    return StatusCode(HttpStatusCode.NotFound);
+                    kh = db.KhachHangs.FirstOrDefault(e => e.email == fCMDangNhap.taiKhoan && e.mat_khau == fCMDangNhap.matKhau && e.trang_thai == true);
+                    if (kh == null)
+                    {
+                        return StatusCode(HttpStatusCode.NotFound);
+                    }
                 }
                 List<DonDatHang> donHang = db.DonDatHangs.Where(e => e.id_khach_hang == kh.id_khach_hang && e.id_tinh_trang == 5).ToList();
                 int soSanPham = 0;
@@ -100,6 +108,7 @@ namespace WebApp.Controllers
                     t_dang_ky = kh.t_dang_ky.ToShortDateString(),
                     email = kh.email,
                     url_hinh = kh.url_hinh,
+                    xac_thuc = kh.xac_thuc,
                     tong_don_hang = donHang.Count,
                     tong_gia = tongGia,
                     so_san_pham = soSanPham
@@ -156,7 +165,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<KhachHang> list = db.KhachHangs.ToList();
+                List<KhachHang> list = db.KhachHangs.Where(e=>e.trang_thai == true).ToList();
                 if (list.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NotFound);
@@ -185,7 +194,8 @@ namespace WebApp.Controllers
                         gioi_tinh = list[i].gioi_tinh,
                         t_dang_ky = list[i].t_dang_ky.ToShortDateString(),
                         email = list[i].email,
-                        url_hinh = list[i].url_hinh
+                        url_hinh = list[i].url_hinh,
+                        xac_thuc = list[i].xac_thuc,
 
                     };
                     ds.Add(tam);
@@ -208,7 +218,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<KhachHang> list = db.KhachHangs.ToList().ToPagedList(page, size).ToList();
+                List<KhachHang> list = db.KhachHangs.Where(e=>e.trang_thai == true).ToList().ToPagedList(page, size).ToList();
                 if (list.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NotFound);
@@ -234,7 +244,8 @@ namespace WebApp.Controllers
                         gioi_tinh = list[i].gioi_tinh,
                         t_dang_ky = list[i].t_dang_ky.ToShortDateString(),
                         email = list[i].email,
-                        url_hinh = list[i].url_hinh
+                        url_hinh = list[i].url_hinh,
+                        xac_thuc = list[i].xac_thuc,
 
                     };
                     ds.Add(tam);
@@ -253,7 +264,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == id);
+                KhachHang kh = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang == id && e.trang_thai == true);
                 if(kh == null)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
@@ -269,7 +280,8 @@ namespace WebApp.Controllers
                     gioi_tinh = kh.gioi_tinh,
                     t_dang_ky = kh.t_dang_ky.ToShortDateString(),
                     email = kh.email,
-                    url_hinh = kh.url_hinh
+                    url_hinh = kh.url_hinh,
+                    xac_thuc = kh.xac_thuc,
                 };
                 return Ok(tam);
             }catch(Exception ex)
@@ -285,10 +297,51 @@ namespace WebApp.Controllers
             try
             {
                 KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == khachhang.tai_khoan|| x.so_dt == khachhang.so_dt||x.email == khachhang.email);
-                if(kh != null)
+                if(kh != null && kh.trang_thai == true)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
+                // tai khoan da cos nhung dang o trang thai xoa
+                if(kh != null && kh.trang_thai == false)
+                {
+                    kh.tai_khoan = khachhang.tai_khoan;
+                    kh.mat_khau = khachhang.mat_khau;
+                    kh.so_dt = khachhang.so_dt;
+                    kh.email = khachhang.email;
+                    kh.gioi_tinh = khachhang.gioi_tinh;
+                    kh.mat_khau = khachhang.mat_khau;
+                    kh.ngay_sinh = khachhang.ngay_sinh;
+                    kh.ten_nguoi_dung = khachhang.ten_nguoi_dung;
+                    kh.url_hinh = khachhang.url_hinh;
+                    kh.xac_thuc = false;
+                    kh.trang_thai = true;
+
+                    db.SubmitChanges();
+
+                    DateTime ngay1 = (DateTime)khachhang.ngay_sinh;
+                    var tam1 = new
+                    {
+                        id_khach_hang = khachhang.id_khach_hang,
+                        tai_khoan = khachhang.tai_khoan,
+                        ten_nguoi_dung = khachhang.ten_nguoi_dung,
+                        ngay_sinh = ngay1.ToShortDateString(),
+                        so_dt = khachhang.so_dt,
+                        gioi_tinh = khachhang.gioi_tinh,
+                        t_dang_ky = khachhang.t_dang_ky.ToShortDateString(),
+                        email = khachhang.email,
+                        url_hinh = khachhang.url_hinh,
+                        xac_thuc = khachhang.xac_thuc,
+                    };
+                    //gui mail xac thuc
+
+                    guiEmail gm1 = new guiEmail();
+                    string mailBody1 = gm1.maimailBody(khachhang.email, khachhang.mat_khau);
+                    gm1.SendGmail(tam1.email, tam1.email, mailBody1);
+
+                    return Ok(tam1);
+                }
+                khachhang.xac_thuc = false;
+                khachhang.trang_thai = true;
                 db.KhachHangs.InsertOnSubmit(khachhang);
                 db.SubmitChanges();
 
@@ -303,8 +356,13 @@ namespace WebApp.Controllers
                     gioi_tinh = khachhang.gioi_tinh,
                     t_dang_ky = khachhang.t_dang_ky.ToShortDateString(),
                     email = khachhang.email,
-                    url_hinh = khachhang.url_hinh
+                    url_hinh = khachhang.url_hinh,
+                    xac_thuc = khachhang.xac_thuc,
                 };
+
+                guiEmail gm = new guiEmail();
+                string mailBody = gm.maimailBody(khachhang.email, khachhang.mat_khau);
+                gm.SendGmail(tam.email, tam.email, mailBody);
                 return Ok(tam);
             }
             catch(Exception ex)
@@ -313,13 +371,34 @@ namespace WebApp.Controllers
             }
         }
         //doi mat khau
+        //[HttpGet]
+        //[ActionName("test")]
+        //public IHttpActionResult test()
+        //{
+        //    try
+        //    {
+        //        string toEmail = "hoviet081096@gmail.com";
+        //        string toName = "viet ho";
+
+
+        //        guiEmail gm = new guiEmail();
+        //        string mailBody = gm.maimailBody("sa", "s");
+        //        gm.SendGmail(toEmail, toName, mailBody);
+
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
         [HttpPost]
         [ActionName("doiMatKhau")]
         public IHttpActionResult doiMatKhau([FromBody] DoiMatKhau doMK)
         {
             try
             {
-                KhachHang kh = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang==doMK.idKhachHang && e.mat_khau.Equals(doMK.matKhauCu));
+                KhachHang kh = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang==doMK.idKhachHang && e.mat_khau.Equals(doMK.matKhauCu)&& e.trang_thai == true);
                 if(kh == null)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
@@ -333,14 +412,33 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpGet]
+        [ActionName("xacnham")]
+        public IHttpActionResult xacThuc(string taiKhoan, string matKhau)
+        {
+            try
+            {
+                KhachHang kh = db.KhachHangs.FirstOrDefault(e => e.email.Equals(taiKhoan) && e.mat_khau.Equals(matKhau));
+                if(kh == null)
+                {
+                    return Ok("XÁC NHẬN KHÔNG THÀNH CÔNG");
+                }
+                kh.xac_thuc = true;
+                db.SubmitChanges();
+                return Ok("XÁC NHẬN THÀNH CÔNG");
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost]
         [ActionName("update")]
         public IHttpActionResult updateKhachHang([FromBody] KhachHang khachhang)
         {
             try
             {
-                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == khachhang.id_khach_hang);
+                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.id_khach_hang == khachhang.id_khach_hang&& x.trang_thai == true);
 
 
                 if (kh== null)
@@ -373,7 +471,8 @@ namespace WebApp.Controllers
                     gioi_tinh = kh.gioi_tinh,
                     t_dang_ky = kh.t_dang_ky.ToShortDateString(),
                     email = kh.email,
-                    url_hinh = kh.url_hinh
+                    url_hinh = kh.url_hinh,
+                    xac_thuc = kh.xac_thuc,
                 };              
 
                 return Ok(tam);
@@ -395,7 +494,7 @@ namespace WebApp.Controllers
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
-                db.KhachHangs.DeleteOnSubmit(kh);
+                kh.trang_thai = false;
                 db.SubmitChanges();
                 return Ok();
             }catch(Exception ex)
@@ -421,7 +520,7 @@ namespace WebApp.Controllers
                 {
                     return StatusCode(HttpStatusCode.NotFound);
                 }
-                kh.url_hinh = "~/hinh/KhachHang" + fileName;
+                kh.url_hinh = "/hinh/KhachHang/" + fileName;
 
                 db.SubmitChanges();
                 return Ok();

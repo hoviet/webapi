@@ -41,7 +41,7 @@ namespace WebApp.Controllers
                         sp.gia_sp = lsp[j].gia_sp;
                         sp.mo_ta = lsp[j].mo_ta;
                         sp.phan_tram_km = lsp[j].phan_tram_km;
-                        sp.url_hinh_chinh = lsp[j].url_hinh_chinh;
+                        sp.url_hinh_chinh = "http://www.3anhem.somee.com" + lsp[j].url_hinh_chinh;
                         sp.so_luong = lsp[j].so_luong;
                         ltam.Add(sp);
 

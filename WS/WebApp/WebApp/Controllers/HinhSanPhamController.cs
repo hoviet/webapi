@@ -139,7 +139,7 @@ namespace WebApp.Controllers
                     string fileName = hinh.idSanpham +"stt"+ i + ".png";
                     image.Save(Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/hinh/SanPham"), fileName));
 
-                    hinhTam.url_hinh = "~/hinh/SanPham" + fileName;
+                    hinhTam.url_hinh = "~/hinh/SanPham/" + fileName;
 
                     db.HinhSPs.InsertOnSubmit(hinhTam);
                     db.SubmitChanges();
