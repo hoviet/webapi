@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using PagedList;
@@ -23,7 +24,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                SanPham sp = db.SanPhams.FirstOrDefault(x => x.id_san_pham == id);
+                SanPham sp = db.SanPhams.FirstOrDefault(x => x.id_san_pham == id && x.trang_thai == true);
 
                 if (sp == null)
                 {
@@ -47,6 +48,7 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         //lay mot san pham co them thuoc tinh yeu thi hay ko
         [HttpGet]
         [ActionName("MotSanPham")]
@@ -54,7 +56,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                SanPham sp = db.SanPhams.FirstOrDefault(x => x.id_san_pham == idSanPham);
+                SanPham sp = db.SanPhams.FirstOrDefault(x => x.id_san_pham == idSanPham && x.trang_thai == true);
                 SanPham tam = new SanPham();
                 SanPhamYeuThich spyt = db.SanPhamYeuThiches.FirstOrDefault(e => e.id_san_pham == idSanPham && e.id_khach_hang == idKhachHang);
                 int idlove = 0;
@@ -93,7 +95,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<SanPham> lsp = db.SanPhams.Where(x => x.id_danh_muc == id).ToList();
+                List<SanPham> lsp = db.SanPhams.Where(x => x.id_danh_muc == id && x.trang_thai == true).ToList();
                 if (lsp.Count==0) 
                 {
                     return StatusCode(HttpStatusCode.NoContent);
@@ -130,15 +132,15 @@ namespace WebApp.Controllers
                 List<SanPham> lsp = new List<SanPham>();
                 if (locTheo == 0) //gia tu thap den cao
                 {
-                    lsp = db.SanPhams.Where(x => x.id_danh_muc == id).OrderBy(e => e.gia_km).ToList();
+                    lsp = db.SanPhams.Where(x => x.id_danh_muc == id && x.trang_thai == true).OrderBy(e => e.gia_km).ToList();
                 }
                 if (locTheo == 1) //gia tu cao den thap
                 {
-                    lsp = db.SanPhams.Where(x => x.id_danh_muc == id).OrderByDescending(e => e.gia_km).ToList();
+                    lsp = db.SanPhams.Where(x => x.id_danh_muc == id && x.trang_thai == true).OrderByDescending(e => e.gia_km).ToList();
                 }
                 if (locTheo == 2) //phan tram khuyen mai cao nhat
                 {
-                    lsp = db.SanPhams.Where(x => x.id_danh_muc == id).OrderByDescending(e => e.phan_tram_km).ToList();
+                    lsp = db.SanPhams.Where(x => x.id_danh_muc == id && x.trang_thai == true).OrderByDescending(e => e.phan_tram_km).ToList();
                 }
                 if (lsp.Count == 0)
                 {
@@ -177,15 +179,15 @@ namespace WebApp.Controllers
                 List<SanPham> lsp = new List<SanPham>();
                 if (pt.locTheo == 0) //gia tu thap den cao
                 {
-                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id).OrderBy(e => e.gia_km).ToList().ToPagedList(pt.trang, pt.size).ToList();
+                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id && x.trang_thai == true).OrderBy(e => e.gia_km).ToList().ToPagedList(pt.trang, pt.size).ToList();
                 }
                 if (pt.locTheo == 1) //gia tu cao den thap
                 {
-                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id).OrderByDescending(e => e.gia_km).ToList().ToPagedList(pt.trang, pt.size).ToList();
+                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id && x.trang_thai == true).OrderByDescending(e => e.gia_km).ToList().ToPagedList(pt.trang, pt.size).ToList();
                 }
                 if (pt.locTheo == 2) //phan tram khuyen mai cao nhat
                 {
-                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id).OrderByDescending(e => e.phan_tram_km).ToList().ToPagedList(pt.trang, pt.size).ToList();
+                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id && x.trang_thai == true).OrderByDescending(e => e.phan_tram_km).ToList().ToPagedList(pt.trang, pt.size).ToList();
                 }
                 if (lsp.Count == 0)
                 {
@@ -225,15 +227,15 @@ namespace WebApp.Controllers
                 List<SanPham> lsp = new List<SanPham>();
                 if (pt.locTheo == 0) //gia tu thap den cao
                 {
-                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id).OrderBy(e => e.gia_km).ToList().ToPagedList(pt.trang,pt.size).ToList();
+                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id && x.trang_thai == true).OrderBy(e => e.gia_km).ToList().ToPagedList(pt.trang,pt.size).ToList();
                 }
                 if (pt.locTheo == 1) //gia tu cao den thap
                 {
-                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id).OrderByDescending(e => e.gia_km).ToList().ToPagedList(pt.trang, pt.size).ToList();
+                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id && x.trang_thai == true).OrderByDescending(e => e.gia_km).ToList().ToPagedList(pt.trang, pt.size).ToList();
                 }
                 if (pt.locTheo == 2) //phan tram khuyen mai cao nhat
                 {
-                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id).OrderByDescending(e => e.phan_tram_km).ToList().ToPagedList(pt.trang, pt.size).ToList();
+                    lsp = db.SanPhams.Where(x => x.id_danh_muc == pt.id && x.trang_thai == true).OrderByDescending(e => e.phan_tram_km).ToList().ToPagedList(pt.trang, pt.size).ToList();
                 }
                 if (lsp.Count == 0)
                 {
@@ -270,7 +272,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<SanPham> listt = db.SanPhams.ToList();
+                List<SanPham> listt = db.SanPhams.Where(e => e.trang_thai == true).ToList();
                 if (listt.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NotFound);
@@ -288,7 +290,7 @@ namespace WebApp.Controllers
                         id_danh_muc = list[i].id_danh_muc,
                         ten_sp = list[i].ten_sp,
                         so_luong = list[i].so_luong,
-                        url_hinh_chinh = "http://www.3anhem.somee.com" + list[i].url_hinh_chinh,
+                        url_hinh_chinh = Request.Headers.Referrer.GetLeftPart(UriPartial.Authority) + list[i].url_hinh_chinh,
                         mo_ta = list[i].mo_ta,
                         phan_tram_km = list[i].phan_tram_km,
                         gia_sp = list[i].gia_sp,
@@ -314,8 +316,7 @@ namespace WebApp.Controllers
         {
             try
             {
-
-                List<SanPham> listt = db.SanPhams.ToList();
+                List<SanPham> listt = db.SanPhams.Where(e=>e.trang_thai == true).ToList();
                 if (listt.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NotFound);
@@ -335,7 +336,7 @@ namespace WebApp.Controllers
                         id_danh_muc = list[i].id_danh_muc,
                         ten_sp = list[i].ten_sp,
                         so_luong = list[i].so_luong,
-                        url_hinh_chinh = "http://www.3anhem.somee.com" + list[i].url_hinh_chinh,
+                        url_hinh_chinh = Request.Headers.Referrer.GetLeftPart(UriPartial.Authority) + list[i].url_hinh_chinh,
                         mo_ta = list[i].mo_ta,
                         phan_tram_km = list[i].phan_tram_km,
                         gia_sp = list[i].gia_sp,
@@ -380,18 +381,34 @@ namespace WebApp.Controllers
 
                 // insert sản phẩm vào db
                 sanPham.url_hinh_chinh = "";
+                //kiem tra neu  san pham da co trong db nhung o trang thai da xoa
+                SanPham sp = db.SanPhams.FirstOrDefault(e => e.id_danh_muc == sanPham.id_danh_muc && e.ten_sp.Equals(sanPham.ten_sp) && e.trang_thai == false);
+                ThemHinhSP themhinh = new ThemHinhSP();
+                string tenHinh;
+                if (sp != null)
+                {                    
+                    tenHinh = themhinh.themHinh(hinh, sanPham.id_san_pham);
+
+                    sp.trang_thai = true;
+                    sp.mo_ta = sanPham.mo_ta;
+                    sp.url_hinh_chinh = "/hinh/SanPham/" + tenHinh;
+                    db.SubmitChanges();
+
+                    return Ok(new ResponseData
+                    {
+                        ResponseCode = 2,
+                        ResponseMessage = "Thành công"
+                    });
+                }
+                
+                sanPham.trang_thai = true;
                 db.SanPhams.InsertOnSubmit(sanPham);
                 db.SubmitChanges();
 
                 // save hình vào server
-                byte[] imageBytes = Convert.FromBase64String(hinh);
-                MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
-                ms.Write(imageBytes, 0, imageBytes.Length);
-                System.Drawing.Image image = System.Drawing.Image.FromStream(ms, true);
-                string fileName = "san_pham_" + sanPham.id_san_pham + ".png";
-                image.Save(Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/hinh/SanPham"), fileName));
-
-                sanPham.url_hinh_chinh = "/hinh/SanPham/" + fileName;
+                tenHinh = themhinh.themHinh(hinh, sanPham.id_san_pham);
+                //update lai url hinh
+                sanPham.url_hinh_chinh = "/hinh/SanPham/" + tenHinh;
                 db.SubmitChanges();
 
                 return Ok(new ResponseData
@@ -486,33 +503,31 @@ namespace WebApp.Controllers
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
-                db.SanPhams.DeleteOnSubmit(sp);
+                sp.trang_thai = false;
                 db.SubmitChanges();
-                return Ok(true);
-            }catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet]
-        [ActionName("test")]
-        public IHttpActionResult test()
-        {
-            try
-            {
-                List<SanPham> ls = db.SanPhams.ToList();
-                string m = ls[0].mo_ta;
-                for(int i = 0; i<ls.Count; i++)
-                {
-                    SanPham a = db.SanPhams.FirstOrDefault(e => e.id_san_pham == ls[i].id_san_pham);
-                    a.mo_ta = m;
-                    db.SubmitChanges();
-                }
                 return Ok();
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+        //[HttpGet]
+        //[ActionName("test")]
+        //public IHttpActionResult test()
+        //{
+        //    try
+        //    {
+                
+
+
+        //        return Ok(HttpContext.Current.Request.UrlReferrer.GetLeftPart(UriPartial.Authority));
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }

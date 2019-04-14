@@ -9,8 +9,8 @@
       <Column Name="so_luong" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="tong_tien" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="thoi_gian_lap" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Association Name="SanPham_ChiTietDonHang" Member="SanPham" ThisKey="id_san_pham" OtherKey="id_san_pham" Type="SanPham" IsForeignKey="true" />
       <Association Name="DonDatHang_ChiTietDonHang" Member="DonDatHang" ThisKey="id_don_hang" OtherKey="id_don_hang" Type="DonDatHang" IsForeignKey="true" />
+      <Association Name="SanPham_ChiTietDonHang" Member="SanPham" ThisKey="id_san_pham" OtherKey="id_san_pham" Type="SanPham" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.DanhSachKhuyenMai" Member="DanhSachKhuyenMais">
@@ -39,30 +39,13 @@
       <Association Name="SanPham_HinhSP" Member="SanPham" ThisKey="id_sp" OtherKey="id_san_pham" Type="SanPham" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.SanPham" Member="SanPhams">
-    <Type Name="SanPham">
-      <Column Name="id_san_pham" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="id_danh_muc" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ten_sp" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
-      <Column Name="gia_sp" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="phan_tram_km" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="gia_km" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="so_luong" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="mo_ta" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="url_hinh_chinh" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Association Name="SanPham_ChiTietDonHang" Member="ChiTietDonHangs" ThisKey="id_san_pham" OtherKey="id_san_pham" Type="ChiTietDonHang" />
-      <Association Name="SanPham_HinhSP" Member="HinhSPs" ThisKey="id_san_pham" OtherKey="id_sp" Type="HinhSP" />
-      <Association Name="SanPham_SanPhamYeuThich" Member="SanPhamYeuThiches" ThisKey="id_san_pham" OtherKey="id_san_pham" Type="SanPhamYeuThich" />
-      <Association Name="DanhMucSanPham_SanPham" Member="DanhMucSanPham" ThisKey="id_danh_muc" OtherKey="id_danh_muc" Type="DanhMucSanPham" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.SanPhamYeuThich" Member="SanPhamYeuThiches">
     <Type Name="SanPhamYeuThich">
       <Column Name="id_yeu_thich" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="id_san_pham" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="id_khach_hang" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="SanPham_SanPhamYeuThich" Member="SanPham" ThisKey="id_san_pham" OtherKey="id_san_pham" Type="SanPham" IsForeignKey="true" />
       <Association Name="KhachHang_SanPhamYeuThich" Member="KhachHang" ThisKey="id_khach_hang" OtherKey="id_khach_hang" Type="KhachHang" IsForeignKey="true" />
+      <Association Name="SanPham_SanPhamYeuThich" Member="SanPham" ThisKey="id_san_pham" OtherKey="id_san_pham" Type="SanPham" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TinhTrangDonHang" Member="TinhTrangDonHangs">
@@ -146,10 +129,16 @@
       <Association Name="KhachHang_DiaChiKhachHang" Member="KhachHang" ThisKey="id_khach_hang" OtherKey="id_khach_hang" Type="KhachHang" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Admin" Member="Admins">
+    <Type Name="Admin">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="[user]" Member="user" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="pass" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
   <Table Name="dbo.KhachHang" Member="KhachHangs">
     <Type Name="KhachHang">
       <Column Name="id_khach_hang" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="tai_khoan" Type="System.String" DbType="NVarChar(550) NOT NULL" CanBeNull="false" />
       <Column Name="mat_khau" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="ten_nguoi_dung" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="so_dt" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
@@ -165,11 +154,22 @@
       <Association Name="KhachHang_DiaChiKhachHang" Member="DiaChiKhachHangs" ThisKey="id_khach_hang" OtherKey="id_khach_hang" Type="DiaChiKhachHang" />
     </Type>
   </Table>
-  <Table Name="dbo.Admin" Member="Admins">
-    <Type Name="Admin">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="[user]" Member="user" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="pass" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+  <Table Name="dbo.SanPham" Member="SanPhams">
+    <Type Name="SanPham">
+      <Column Name="id_san_pham" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="id_danh_muc" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ten_sp" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="gia_sp" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="phan_tram_km" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="gia_km" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="so_luong" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="mo_ta" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="url_hinh_chinh" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="trang_thai" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="SanPham_ChiTietDonHang" Member="ChiTietDonHangs" ThisKey="id_san_pham" OtherKey="id_san_pham" Type="ChiTietDonHang" />
+      <Association Name="SanPham_HinhSP" Member="HinhSPs" ThisKey="id_san_pham" OtherKey="id_sp" Type="HinhSP" />
+      <Association Name="SanPham_SanPhamYeuThich" Member="SanPhamYeuThiches" ThisKey="id_san_pham" OtherKey="id_san_pham" Type="SanPhamYeuThich" />
+      <Association Name="DanhMucSanPham_SanPham" Member="DanhMucSanPham" ThisKey="id_danh_muc" OtherKey="id_danh_muc" Type="DanhMucSanPham" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

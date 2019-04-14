@@ -22,16 +22,23 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<DanhMucSanPham> listTam = db.DanhMucSanPhams.ToList().Select(e =>
-                {
-                    e.SanPhams = null;
-                    return e;
-                }).ToList();
+                List<DanhMucSanPham> listTam = db.DanhMucSanPhams.ToList();
                 if (listTam.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
-                return Ok(listTam);
+                List<dynamic> obj = new List<dynamic>();
+                for(int i = 0; i <listTam.Count; i++)
+                {
+                    var tam = new
+                    {
+                        id_danh_muc = listTam[i].id_danh_muc,
+                        ten_danh_muc = listTam[i].ten_danh_muc,
+                        url_hinh = listTam[i].url_hinh
+                    };
+                    obj.Add(tam);
+                }
+                return Ok(obj);
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);

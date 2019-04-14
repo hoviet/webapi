@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="QL_BHConnectionString-Web.config Connection String" description="QL_BHConnectionString Connection String used in web.config by the application to access the database." defaultValue="Server=vtnshop.mssql.somee.com;Initial Catalog=vtnshop;uid=Duythuong97_SQLLogin_1;pwd=tb15kpv4wd" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Quang\ Viet\\Desktop\\WS\\WebApp\\WebApp\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='QL_BHConnectionString']/@connectionString" />
+  </parameter>
+</parameters>

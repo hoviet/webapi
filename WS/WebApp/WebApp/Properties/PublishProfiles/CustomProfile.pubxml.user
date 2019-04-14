@@ -80,10 +80,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/10/2013 16:29:20</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>03/26/2019 15:45:36</publishTime>
+      <publishTime>04/05/2019 14:27:49</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>03/26/2019 15:45:36</publishTime>
+      <publishTime>04/05/2019 14:27:49</publishTime>
     </File>
     <File Include="bin/JWT.dll">
       <publishTime>02/20/2019 14:32:28</publishTime>
@@ -311,10 +311,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2018 12:20:56</publishTime>
     </File>
     <File Include="bin/WebApp.dll">
-      <publishTime>03/26/2019 15:45:19</publishTime>
+      <publishTime>04/05/2019 14:26:04</publishTime>
     </File>
     <File Include="bin/WebApp.pdb">
-      <publishTime>03/26/2019 15:45:19</publishTime>
+      <publishTime>04/05/2019 14:26:04</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 13:57:34</publishTime>
@@ -371,10 +371,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/19/2019 21:41:53</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>03/26/2019 15:45:26</publishTime>
+      <publishTime>04/05/2019 14:27:42</publishTime>
     </File>
     <File Include="QuanLyBanHang.dbml">
-      <publishTime>03/26/2019 15:13:51</publishTime>
+      <publishTime>03/28/2019 21:23:56</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>02/19/2019 21:42:02</publishTime>
@@ -419,7 +419,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/19/2019 21:41:53</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>03/26/2019 08:17:53</publishTime>
+      <publishTime>04/05/2019 14:27:41</publishTime>
     </File>
   </ItemGroup>
 </Project>

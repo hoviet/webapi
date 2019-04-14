@@ -50,7 +50,6 @@ namespace WebApp.Controllers
                 var tam = new
                 {
                     id_khach_hang = kh.id_khach_hang,
-                    tai_khoan = kh.tai_khoan,
                     ten_nguoi_dung = kh.ten_nguoi_dung,
                     ngay_sinh = ngay.ToShortDateString(),
                     so_dt = kh.so_dt,
@@ -100,7 +99,6 @@ namespace WebApp.Controllers
                 var tam = new
                 {
                     id_khach_hang = kh.id_khach_hang,
-                    tai_khoan = kh.tai_khoan,
                     ten_nguoi_dung = kh.ten_nguoi_dung,
                     ngay_sinh = ngay.ToShortDateString(),
                     so_dt = kh.so_dt,
@@ -187,7 +185,6 @@ namespace WebApp.Controllers
                     {
 
                         id_khach_hang = list[i].id_khach_hang,
-                        tai_khoan = list[i].tai_khoan,
                         ten_nguoi_dung = list[i].ten_nguoi_dung,
                         ngay_sinh = ngay.ToShortDateString(),
                         so_dt = list[i].so_dt,
@@ -237,7 +234,6 @@ namespace WebApp.Controllers
                     {
 
                         id_khach_hang = list[i].id_khach_hang,
-                        tai_khoan = list[i].tai_khoan,
                         ten_nguoi_dung = list[i].ten_nguoi_dung,
                         ngay_sinh = ngay.ToShortDateString(),
                         so_dt = list[i].so_dt,
@@ -273,7 +269,6 @@ namespace WebApp.Controllers
                 var tam = new
                 {
                     id_khach_hang = kh.id_khach_hang,
-                    tai_khoan = kh.tai_khoan,
                     ten_nguoi_dung = kh.ten_nguoi_dung,
                     ngay_sinh = ngay.ToShortDateString(),
                     so_dt = kh.so_dt,
@@ -296,7 +291,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.tai_khoan == khachhang.tai_khoan|| x.so_dt == khachhang.so_dt||x.email == khachhang.email);
+                KhachHang kh = db.KhachHangs.FirstOrDefault(x => x.so_dt == khachhang.so_dt||x.email == khachhang.email);
                 if(kh != null && kh.trang_thai == true)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
@@ -304,7 +299,6 @@ namespace WebApp.Controllers
                 // tai khoan da cos nhung dang o trang thai xoa
                 if(kh != null && kh.trang_thai == false)
                 {
-                    kh.tai_khoan = khachhang.tai_khoan;
                     kh.mat_khau = khachhang.mat_khau;
                     kh.so_dt = khachhang.so_dt;
                     kh.email = khachhang.email;
@@ -322,7 +316,6 @@ namespace WebApp.Controllers
                     var tam1 = new
                     {
                         id_khach_hang = khachhang.id_khach_hang,
-                        tai_khoan = khachhang.tai_khoan,
                         ten_nguoi_dung = khachhang.ten_nguoi_dung,
                         ngay_sinh = ngay1.ToShortDateString(),
                         so_dt = khachhang.so_dt,
@@ -349,7 +342,6 @@ namespace WebApp.Controllers
                 var tam = new
                 {
                     id_khach_hang = khachhang.id_khach_hang,
-                    tai_khoan = khachhang.tai_khoan,
                     ten_nguoi_dung = khachhang.ten_nguoi_dung,
                     ngay_sinh = ngay.ToShortDateString(),
                     so_dt = khachhang.so_dt,
@@ -370,35 +362,16 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        //doi mat khau
-        //[HttpGet]
-        //[ActionName("test")]
-        //public IHttpActionResult test()
-        //{
-        //    try
-        //    {
-        //        string toEmail = "hoviet081096@gmail.com";
-        //        string toName = "viet ho";
-
-
-        //        guiEmail gm = new guiEmail();
-        //        string mailBody = gm.maimailBody("sa", "s");
-        //        gm.SendGmail(toEmail, toName, mailBody);
-
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+        
         [HttpPost]
         [ActionName("doiMatKhau")]
         public IHttpActionResult doiMatKhau([FromBody] DoiMatKhau doMK)
         {
             try
             {
-                KhachHang kh = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang==doMK.idKhachHang && e.mat_khau.Equals(doMK.matKhauCu)&& e.trang_thai == true);
+                KhachHang kh = db.KhachHangs.FirstOrDefault(e => e.id_khach_hang==doMK.idKhachHang 
+                && e.mat_khau.Equals(doMK.matKhauCu)
+                && e.trang_thai == true);
                 if(kh == null)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
@@ -450,7 +423,7 @@ namespace WebApp.Controllers
                 {
                     kh.ten_nguoi_dung = khachhang.ten_nguoi_dung;
                 }                             
-                if(khachhang.ngay_sinh != null)
+                if(khachhang.ngay_sinh.Equals("0001 - 01 - 01T00: 00:00"))
                 {
                     kh.ngay_sinh = khachhang.ngay_sinh;
                 } 
@@ -464,9 +437,8 @@ namespace WebApp.Controllers
                 var tam = new
                 {
                     id_khach_hang = kh.id_khach_hang,
-                    tai_khoan = kh.tai_khoan,
                     ten_nguoi_dung = kh.ten_nguoi_dung,
-                    ngay_sinh = ngay.ToShortDateString(),
+                    ngay_sinh = ngay.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture),
                     so_dt = kh.so_dt,
                     gioi_tinh = kh.gioi_tinh,
                     t_dang_ky = kh.t_dang_ky.ToShortDateString(),

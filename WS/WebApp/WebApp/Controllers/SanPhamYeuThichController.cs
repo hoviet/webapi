@@ -22,30 +22,34 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<SanPhamYeuThich> list = db.SanPhamYeuThiches.Where(x => x.id_khach_hang == id).ToList();
-                List<SanPhamYeuThichHT> tam = new List<SanPhamYeuThichHT>();
+                List<SanPhamYeuThich> list = db.SanPhamYeuThiches.Where(x => x.id_khach_hang == id).ToList();               
+                List<dynamic> tam = new List<dynamic>();
                 if (list.Count ==0)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 for (int i = 0; i < list.Count; i++)
                 {
-                    SanPhamYeuThichHT spyt = new SanPhamYeuThichHT();
-                    spyt.idKhachHang = list[i].id_khach_hang;
-                    spyt.idSanPham = list[i].id_san_pham;
-                    spyt.idYeuThich = list[i].id_yeu_thich;
                     SanPham sp = db.SanPhams.FirstOrDefault(e => e.id_san_pham == list[i].id_san_pham);
-                    SanPham spTam = new SanPham();
-                    spTam.id_san_pham = sp.id_san_pham;
-                    spTam.id_danh_muc = sp.id_danh_muc;
-                    spTam.ten_sp = sp.ten_sp;
-                    spTam.so_luong = sp.so_luong;
-                    spTam.url_hinh_chinh = sp.url_hinh_chinh;
-                    spTam.mo_ta = sp.mo_ta;
-                    spTam.phan_tram_km = sp.phan_tram_km;
-                    spTam.gia_sp = sp.gia_sp;
-                    spTam.gia_km = sp.gia_km;
-                    spyt.sanPham = spTam;
+                    var spTam = new
+                    {
+                        id_san_pham = sp.id_san_pham,
+                        id_danh_muc = sp.id_danh_muc,
+                        ten_sp = sp.ten_sp,
+                        so_luong = sp.so_luong,
+                        url_hinh_chinh = "http://www.3anhem.somee.com" + sp.url_hinh_chinh,
+                        mo_ta = sp.mo_ta,
+                        phan_tram_km = sp.phan_tram_km,
+                        gia_sp = sp.gia_sp,
+                        gia_km = sp.gia_km
+                    };
+                    var spyt = new
+                    {
+                        idKhachHang = list[i].id_khach_hang,
+                        idSanPham = list[i].id_san_pham,
+                        idYeuThich = list[i].id_yeu_thich,
+                        sanPham = spTam
+                    };
                     tam.Add(spyt);
                 }
                 return Ok(tam);
@@ -73,12 +77,13 @@ namespace WebApp.Controllers
                     return StatusCode(HttpStatusCode.NoContent);
                 }
 
-                SanPhamYeuThich tam = new SanPhamYeuThich();
-                tam.id_yeu_thich = sp.id_yeu_thich;
-                tam.id_san_pham = sp.id_san_pham;
-                tam.id_khach_hang = tam.id_khach_hang;
-
-                return Ok(tam);
+                var spYT = new
+                {
+                    id_yeu_thich = sp.id_yeu_thich,
+                    id_san_pham = sp.id_san_pham,
+                    id_khach_hang = sp.id_khach_hang
+                };
+                return Ok(spYT);
             }
             catch (Exception ex)
             {
@@ -93,29 +98,34 @@ namespace WebApp.Controllers
             try
             {
                 List<SanPhamYeuThich> list = db.SanPhamYeuThiches.Where(x => x.id_khach_hang == phanTrang.id).ToPagedList(phanTrang.trang, phanTrang.size).ToList();
-                List<SanPhamYeuThichHT> tam = new List<SanPhamYeuThichHT>();               
+                List<dynamic> tam = new List<dynamic>();
                 if (list.Count == 0)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 for (int i = 0; i < list.Count; i++)
                 {
-                    SanPhamYeuThichHT spyt = new SanPhamYeuThichHT();
-                    spyt.idKhachHang = list[i].id_khach_hang;
-                    spyt.idSanPham = list[i].id_san_pham;
-                    spyt.idYeuThich = list[i].id_yeu_thich;
                     SanPham sp = db.SanPhams.FirstOrDefault(e => e.id_san_pham == list[i].id_san_pham);
-                    SanPham spTam = new SanPham();
-                    spTam.id_san_pham = sp.id_san_pham;
-                    spTam.id_danh_muc = sp.id_danh_muc;
-                    spTam.ten_sp = sp.ten_sp;
-                    spTam.so_luong = sp.so_luong;
-                    spTam.url_hinh_chinh = sp.url_hinh_chinh;
-                    spTam.mo_ta = sp.mo_ta;
-                    spTam.phan_tram_km = sp.phan_tram_km;
-                    spTam.gia_sp = sp.gia_sp;
-                    spTam.gia_km = sp.gia_km;
-                    spyt.sanPham = spTam;
+                    var spTam = new
+                    {
+                        id_san_pham = sp.id_san_pham,
+                        id_danh_muc = sp.id_danh_muc,
+                        ten_sp = sp.ten_sp,
+                        so_luong = sp.so_luong,
+                        url_hinh_chinh = "http://www.3anhem.somee.com" + sp.url_hinh_chinh,
+                        mo_ta = sp.mo_ta,
+                        phan_tram_km = sp.phan_tram_km,
+                        gia_sp = sp.gia_sp,
+                        gia_km = sp.gia_km
+                    };
+                    var spyt = new
+                    {
+                        idKhachHang = list[i].id_khach_hang,
+                        idSanPham = list[i].id_san_pham,
+                        idYeuThich = list[i].id_yeu_thich,
+                        sanPham = spTam
+                    };
+
                     tam.Add(spyt);
                 }
                 return Ok(tam);
@@ -131,7 +141,9 @@ namespace WebApp.Controllers
         {
             try
             {
-                SanPhamYeuThich sp = db.SanPhamYeuThiches.FirstOrDefault(x => x.id_san_pham == sanPhamYeuThich.id_san_pham && x.id_khach_hang == sanPhamYeuThich.id_khach_hang);
+                SanPhamYeuThich sp = db.SanPhamYeuThiches.FirstOrDefault(x => x.id_san_pham == sanPhamYeuThich.id_san_pham 
+                && x.id_khach_hang == sanPhamYeuThich.id_khach_hang);
+
                 if (sp != null)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
@@ -139,11 +151,14 @@ namespace WebApp.Controllers
 
                 db.SanPhamYeuThiches.InsertOnSubmit(sanPhamYeuThich);
                 db.SubmitChanges();
-                SanPhamYeuThich tam = new SanPhamYeuThich();
-                tam.id_yeu_thich = sanPhamYeuThich.id_yeu_thich;
-                tam.id_san_pham = sanPhamYeuThich.id_san_pham;
-                tam.id_khach_hang = sanPhamYeuThich.id_khach_hang;
-                
+
+                var tam = new
+                {
+                    id_yeu_thich = sanPhamYeuThich.id_yeu_thich,
+                    id_san_pham = sanPhamYeuThich.id_san_pham,
+                    id_khach_hang = sanPhamYeuThich.id_khach_hang,
+                };
+
                 return Ok(tam);
             }catch(Exception ex)
             {

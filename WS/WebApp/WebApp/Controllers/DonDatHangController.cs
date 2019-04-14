@@ -19,6 +19,7 @@ namespace WebApp.Controllers
     public class DonDatHangController : ApiController
     {
        private QuanLyBanHangDataContext db = new QuanLyBanHangDataContext();
+
         //lay danh sach don dat hang doi voi 1 khach hang
         [HttpPost]
         [ActionName("getList")]
@@ -102,7 +103,7 @@ namespace WebApp.Controllers
                     sp.mo_ta = tam.mo_ta;
                     sp.phan_tram_km = tam.phan_tram_km;
                     sp.ten_sp = tam.ten_sp;
-                    sp.url_hinh_chinh = tam.url_hinh_chinh;
+                    sp.url_hinh_chinh = "http://www.3anhem.somee.com" + tam.url_hinh_chinh;
                     sp.gia_sp = tam.gia_sp;
                     sp.gia_km = tam.gia_km;
                     dsp.sanPham = sp;

@@ -180,8 +180,15 @@ namespace WebApp.Controllers
                 tam.idXaPhuong = dc.id_xa_phuong;
                 tam.tenXaPhuong = db.XaPhuongs.FirstOrDefault(e => e.ma_xa_phuong == dc.id_xa_phuong).ten;
 
-                List<QuanHuyen> listQuanHuyen = db.QuanHuyens.Where(e => e.ma_tinh == dc.id_tinh).ToList().Select(e => { e.TinhThanh = null; e.XaPhuongs = null; e.DiaChiKhachHangs = null; return e; }).ToList();
-                List<XaPhuong> listXaPhuong = db.XaPhuongs.Where(e => e.ma_quan_huyen == dc.id_quan).ToList().Select(e => { e.QuanHuyen = null; e.DiaChiKhachHangs = null; return e; }).ToList();
+                List<QuanHuyen> listQuanHuyen = db.QuanHuyens.Where(e => e.ma_tinh == dc.id_tinh).ToList().Select(e => {
+                    e.TinhThanh = null;
+                    e.XaPhuongs = null;
+                    e.DiaChiKhachHangs = null;
+                    return e; }).ToList();
+                List<XaPhuong> listXaPhuong = db.XaPhuongs.Where(e => e.ma_quan_huyen == dc.id_quan).ToList().Select(e => {
+                    e.QuanHuyen = null;
+                    e.DiaChiKhachHangs = null;
+                    return e; }).ToList();
                 
                 tam.diaChi = dc.dia_chi;
                 tam.id = dc.id;
@@ -207,7 +214,10 @@ namespace WebApp.Controllers
         {
             try
             {
-                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e =>e.so_dt==diaChi.so_dt && e.id_khach_hang == diaChi.id_khach_hang && e.id_xa_phuong == diaChi.id_xa_phuong && e.dia_chi.Equals(diaChi.dia_chi));
+                DiaChiKhachHang dc = db.DiaChiKhachHangs.FirstOrDefault(e =>e.so_dt==diaChi.so_dt 
+                && e.id_khach_hang == diaChi.id_khach_hang 
+                && e.id_xa_phuong == diaChi.id_xa_phuong 
+                && e.dia_chi.Equals(diaChi.dia_chi));
                 if(dc != null)
                 {
                     return StatusCode(HttpStatusCode.NoContent);

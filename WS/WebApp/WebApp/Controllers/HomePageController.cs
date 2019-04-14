@@ -22,39 +22,53 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<DanhMucSanPham> ldmsp = db.DanhMucSanPhams.ToList();               
-                List<HomePage> lhp = new List<HomePage>();                
-                for (int i = 0; i <ldmsp.Count; i++)
+                List<DanhMucSanPham> ldmsp = db.DanhMucSanPhams.ToList();
+                List<SanPham> lsp = db.SanPhams.ToList();
+                List<dynamic> lhp = new List<dynamic>();
+                for (int i = 0; i < ldmsp.Count; i++)
                 {
-                    HomePage tam = new HomePage();
-                    List<SanPham> ltam = new List<SanPham>();               
-                    tam.tenDanhMuc = ldmsp[i].ten_danh_muc; // lay ten danh muc san pham
-                    List<SanPham> lsp = db.SanPhams.Where(x => x.id_danh_muc == ldmsp[i].id_danh_muc).Take(5).ToList(); // lay 5 san pham thuoc danh muc
-
+                    List<dynamic> ltam = new List<dynamic>();
+                    // lay 4 san pham thuoc danh muc
+                    int dem = 0;
                     for (int j = 0; j < lsp.Count; j++)
                     {
-                        SanPham sp = new SanPham();
-                        sp.id_san_pham = lsp[j].id_san_pham;
-                        sp.id_danh_muc = lsp[j].id_danh_muc;
-                        sp.ten_sp = lsp[j].ten_sp;
-                        sp.gia_km = lsp[j].gia_km;
-                        sp.gia_sp = lsp[j].gia_sp;
-                        sp.mo_ta = lsp[j].mo_ta;
-                        sp.phan_tram_km = lsp[j].phan_tram_km;
-                        sp.url_hinh_chinh = "http://www.3anhem.somee.com" + lsp[j].url_hinh_chinh;
-                        sp.so_luong = lsp[j].so_luong;
-                        ltam.Add(sp);
-
+                        if (ldmsp[i].id_danh_muc == lsp[j].id_danh_muc && dem < 4 && lsp[i].trang_thai == true)
+                        {
+                            var sp = new
+                            {
+                                id_san_pham = lsp[j].id_san_pham,
+                                id_danh_muc = lsp[j].id_danh_muc,
+                                ten_sp = lsp[j].ten_sp,
+                                gia_km = lsp[j].gia_km,
+                                gia_sp = lsp[j].gia_sp,
+                                mo_ta = lsp[j].mo_ta,
+                                phan_tram_km = lsp[j].phan_tram_km,
+                                url_hinh_chinh = "http://www.3anhem.somee.com" + lsp[j].url_hinh_chinh,
+                                so_luong = lsp[j].so_luong,
+                            };
+                            ltam.Add(sp);
+                            dem = dem + 1;
+                        }
+                        if(dem >= 4)
+                        {
+                            break;
+                        }
                     }
-                    tam.sanPham = ltam; //
-                    tam.id = ldmsp[i].id_danh_muc; // lay id danh muc san pham                    
+                    var tam = new
+                    {
+                        id = ldmsp[i].id_danh_muc, // lay id danh muc san pham
+                        tenDanhMuc = ldmsp[i].ten_danh_muc,// lay ten danh muc san pham
+                        sanPham = ltam, //                           
+                    };
                     lhp.Add(tam);
                 }
                 return Ok(lhp);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+        
     }
 }

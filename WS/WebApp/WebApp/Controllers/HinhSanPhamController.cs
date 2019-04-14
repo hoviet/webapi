@@ -84,6 +84,7 @@ namespace WebApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+       
         [HttpGet]
         [ActionName("danhsach")]
         public IHttpActionResult danhSach(int page, int size)
