@@ -193,6 +193,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChiTietDonHangController.cs" />
     <Compile Include="Controllers\DanhMucSanPhamController.cs" />
     <Compile Include="Controllers\DanhSachKhuyenMaiController.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Controllers\JWTController.cs" />
     <Compile Include="Controllers\KhachHangController.cs" />
     <Compile Include="Controllers\QuanController.cs" />
+    <Compile Include="Models\DN.cs" />
     <Compile Include="Models\ResponseData.cs" />
     <Compile Include="Controllers\SanPhamController.cs" />
     <Compile Include="Controllers\SanPhamYeuThichController.cs" />
